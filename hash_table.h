@@ -1,0 +1,72 @@
+#ifndef HASH_TABLE_H_INCLUDED
+#define HASH_TABLE_H_INCLUDED
+
+#include<string.h>
+#include "expression.h"
+
+const unsigned int HASH_TABLE_SIZE = 13;
+
+typedef struct Var{
+    char * name;
+    Expression* expression;
+    struct Var* next;
+} Variable;
+typedef Variable** Table;
+/**
+ * This function returns a hash table to manage variables
+ */
+Table createTable();
+
+/**
+ * returns if the Variable is defined and also its value, its type and its length if it's an array
+ */
+int valueOf(const Table table, const char * var, Expression* value);
+
+/**
+ * A Set of adds Variableiables
+ */
+/*
+ * Creates a variable without a type
+ */
+EXIT_CODE add(Table table, const char * var);
+/*
+ * Creates a variable with a default value:
+ */
+EXIT_CODE addDefaultInt(Table table, const char * var); // int i = 0;
+EXIT_CODE addDefaultChar(Table table, const char * var); // char c = '\0';
+EXIT_CODE addDefaultDouble(Table table, const char * var); // double d = 0.0;
+EXIT_CODE addDefaultBoolean(Table table, const char * var); // boolean b = false;
+
+EXIT_CODE addInt(Table table, const char * var, int value);
+EXIT_CODE addChar(Table table, const char * var, char value);
+EXIT_CODE addDouble(Table table, const char * var, double value);
+EXIT_CODE addBoolean(Table table, const char * var, Boolean bool);
+
+EXIT_CODE addDefaultArrayInt(Table table, const char * var, int len); // array de 0's
+EXIT_CODE addDefaultArrayChar(Table table, const char * var, int len); // array de '\0'
+EXIT_CODE addDefaultArrayDouble(Table table, const char * var, int len); // array de 0.0
+EXIT_CODE addDefaultArrayBoolean(Table table, const char * var, int len); //array de falses
+
+EXIT_CODE addArrayInt(Table table, const char * var, int* value, int len);
+EXIT_CODE addArrayChar(Table table, const char * var, char* value, int len);
+EXIT_CODE addArrayDouble(Table table, const char * var, double* value, int len);
+EXIT_CODE addArrayBoolean(Table table, const char * var, Boolean* bool, int len);
+
+/*
+ * This function deletes a Variable if it's defined
+ */
+EXIT_CODE delete(Table table, char * var);
+/*
+ * Changes the value of a Variable if the type is the right and exists
+ */
+EXIT_CODE changeInt(const Table table, const char * var, int newValue);
+EXIT_CODE changeChar(const Table table, const char * var, char newValue);
+EXIT_CODE changeDouble(const Table table, const char * var, double newValue);
+EXIT_CODE changeBoolean(const Table table, const char * var, Boolean newValue);
+
+EXIT_CODE changeArrayInt(const Table table, const char * var, int newValue, int position);
+EXIT_CODE changeArrayChar(const Table table, const char * var, char newValue, int position);
+EXIT_CODE changeArrayDouble(const Table table, const char * var, double newValue, int position);
+EXIT_CODE changeArrayBoolean(const Table table, const char * var, Boolean newValue, int position);
+
+#endif // HASH_TABLE_H_INCLUDED
