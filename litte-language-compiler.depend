@@ -1,0 +1,44 @@
+# depslib dependency file v1.0
+1573600441 source:c:\users\alejandro\desktop\udc 2019-2020\procesamento de linguaxe\proya\litte-language-compiler\main.c
+	<stdio.h>
+	<stdlib.h>
+	"expression.h"
+
+1573603119 source:c:\users\alejandro\desktop\udc 2019-2020\procesamento de linguaxe\proya\litte-language-compiler\expression.c
+	"expression.h"
+
+1573602977 c:\users\alejandro\desktop\udc 2019-2020\procesamento de linguaxe\proya\litte-language-compiler\expression.h
+	<stdio.h>
+	<stdlib.h>
+	"error.h"
+
+1573601827 c:\users\alejandro\desktop\udc 2019-2020\procesamento de linguaxe\proya\litte-language-compiler\error.h
+
+1573599478 source:c:\users\alejandro\desktop\udc 2019-2020\procesamento de linguaxe\proya\litte-language-compiler\hash_table.c
+	"hash_table.h"
+
+1573600181 c:\users\alejandro\desktop\udc 2019-2020\procesamento de linguaxe\proya\litte-language-compiler\hash_table.h
+	"expression.h"
+
+1573603119 source:c:\users\alejandro\desktop\udc 2019-2020\pl\proya\litte-language-compiler\expression.c
+	"expression.h"
+
+1573602977 c:\users\alejandro\desktop\udc 2019-2020\pl\proya\litte-language-compiler\expression.h
+	<stdio.h>
+	<stdlib.h>
+	"error.h"
+
+1573601827 c:\users\alejandro\desktop\udc 2019-2020\pl\proya\litte-language-compiler\error.h
+
+1573664105 source:c:\users\alejandro\desktop\udc 2019-2020\pl\proya\litte-language-compiler\main.c
+	<stdio.h>
+	<stdlib.h>
+	"expression.h"
+
+1573656817 source:c:\users\alejandro\desktop\udc 2019-2020\pl\proya\litte-language-compiler\hash_table.c
+	"hash_table.h"
+
+1573602983 c:\users\alejandro\desktop\udc 2019-2020\pl\proya\litte-language-compiler\hash_table.h
+	<string.h>
+	"expression.h"
+
