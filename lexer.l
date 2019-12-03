@@ -7,21 +7,23 @@
 WS [ \t\n]
 
 NAMELITERAL [:alpha:]
-NUM [0-9]
-CAR [a-Z]
-NYC {NUM} | {CAR} /* Una letra o caracter */
 
-NUMS {NUM}+
-CARS {CAR}+
-NYCS {NYC}+       /* Numeros y/o caracteres */
+NUMS [:digit:]+
+CARS [:alpha:]+
+NYCS [[:alnum:][:space:]]+
+
 
 BINARYOP [\+\-\*\/"and""or"]
+OPPAR [(]
+CLOSEPAR )
 
+IDENTITYRULE [:alpha:]+[:alnum:]*
 %%
 
 {WS}*            // Caracteres escapados
+
 \"{NYCS}\"       {yyval.valString = strdup(yytext); return STRING;}
-"("              {return OPPARTH;}
+{OPPAR}          {return OPPARTH;}
 ")"              {return CLOSPARTH;}
 ":"              {return ASSIGNTOK;}
 "="              {return EQUALS;}
@@ -40,7 +42,7 @@ BINARYOP [\+\-\*\/"and""or"]
 
 
 
-{CAR}{NYCS}      {return IDENTIFIER;}
+{IDENTITYRULE}   {return IDENTIFIER;}
 
 
 .          {
