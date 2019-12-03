@@ -19,16 +19,15 @@
 %token ASSIGEQUALS
 %token OPPARTH
 %token CLOSPARTH
-%left <valString> BINARYOP
 %token <valInt> NUMBER
 %token <valString> STRING
 %token TRUE
 %token FALSE
 
+%left <valString> BINARYOP
 %left "+"  "-"
 %left "*"  "/"
-%left UMINUS
-
+%precedence NEG   /* negation--unary minus */
 
 %start S
 %% /* grammar */
@@ -66,8 +65,8 @@ expression:
   | expression "+" expression
   | expression "-" expression
   | expression "*" expression
-  | expression "/" expression 
-  | UMINUS expression                              {printf("-_");}
+  | expression "/" expression
+  | '-' expression  %prec NEG                       {printf("-_");}
   | binaryOp
   | IDENTIFIER                                      {printf("Identifier s");}
   | literal                                         {printf("Literal: s");}
