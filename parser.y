@@ -19,24 +19,12 @@
 %token ASSIGEQUALS
 %token OPPARTH
 %token CLOSPARTH
-%token UMINUSOP
-%token PLUSOP
-%token MINUSOP
-%token MULTOP
-%token DIVOP
-%token ANDOP
-%token OROP
-%token IMPLOP
-%token DOUBLEIMPLOP
-%token XOROP
-%token EQOP
-%token LTOP
-%token GTOP
-%token NEQOP
-%token LEQOP
-%token GEQOP
+%token <valString> UNARYOP
+%token <valString> BINARYOP
 %token <valInt> NUMBER
 %token <valString> STRING
+%token TRUE
+%token FALSE
 
 %start S
 %% /* grammar */
@@ -66,22 +54,13 @@ varAssign:
 ;
 
 literal:
-  NUMBER | STRING | "true" | "false"
-;
-
-binOperator:
-    PLUSOP | MINUSOP | MULTOP | DIVOP | ANDOP | OROP | IMPLOP |
-    DOUBLEIMPLOP | XOROP | EQOP | LTOP | GTOP | NEQOP | LEQOP | GEQOP
-;
-
-unaryOperator:
-    UMINUSOP
+  NUMBER | STRING | TRUE | FALSE
 ;
 
 expression:
   OPPARTH expression CLOSPARTH                      {printf("(s)");}
-  | unaryOperator expression                        {printf("op _");}
-  | expression binOperator expression               {printf("_ op _");}
+  | UNARYOP expression                              {printf("%s _",$1);}
+  | expression BINARYOP expression                  {printf("_ %s _",$2);}
   | IDENTIFIER                                      {printf("Identifier s");}
   | literal                                         {printf("Literal: s");}
 ;
