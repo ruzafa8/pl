@@ -19,12 +19,16 @@
 %token ASSIGEQUALS
 %token OPPARTH
 %token CLOSPARTH
-%token <valString> UNARYOP
-%token <valString> BINARYOP
+%left <valString> BINARYOP
 %token <valInt> NUMBER
 %token <valString> STRING
 %token TRUE
 %token FALSE
+
+%left "+"  "-"
+%left "*"  "/"
+%left UMINUS
+
 
 %start S
 %% /* grammar */
@@ -59,12 +63,18 @@ literal:
 
 expression:
   OPPARTH expression CLOSPARTH                      {printf("(s)");}
-  | UNARYOP expression                              {printf("%s _",$1);}
-  | expression BINARYOP expression                  {printf("_ %s _",$2);}
+  | expression "+" expression
+  | expression "-" expression
+  | expression "*" expression
+  | expression "/" expression 
+  | UMINUS expression                              {printf("-_");}
+  | binaryOp
   | IDENTIFIER                                      {printf("Identifier s");}
   | literal                                         {printf("Literal: s");}
 ;
 
+binaryOp:
+  expression BINARYOP expression
 
 %%
 void yyerror (char const *message) { fprintf (stderr, "%s[%d]\n", message,yylineno);}
