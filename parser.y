@@ -48,13 +48,13 @@ sentence:
   | expression
 
 varDecl:
-  IDENTIFIER ASSIGNTOK TYPETOK EQUALS expression    {printf("Variable s Type t =");}
-  | IDENTIFIER ASSIGNTOK TYPETOK                    {printf("Variable s Type t (noVal)\n");}
-  | IDENTIFIER ASSIGEQUALS expression               {printf("Variable s, auto, =");}
+  IDENTIFIER ASSIGNTOK TYPETOK EQUALS expression    {printf("Variable %s Type %s = \n", $1, $3);}
+  | IDENTIFIER ASSIGNTOK TYPETOK                    {printf("Variable %s Type %s (noVal)\n", $1, $3);}
+  | IDENTIFIER ASSIGEQUALS expression               {printf("Variable %s, auto, = \n", $1);}
 ;
 
 varAssign:
-  IDENTIFIER EQUALS expression                      {printf("Variable s =");}
+  IDENTIFIER EQUALS expression                      {printf("Variable %s =", $1);}
 ;
 
 literal:
@@ -79,7 +79,7 @@ t: t MINUS f | f
 f: f MULTIPLICAR g | g
 g: g DIVIDE h | h
 h: h BINARYOP i | i
-i: OPPARTH expression CLOSPARTH | literal
+i: OPPARTH expression CLOSPARTH | literal | IDENTIFIER
 /*
 binaryOp:
   expression BINARYOP expression

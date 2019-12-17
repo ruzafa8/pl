@@ -42,7 +42,7 @@ IDENTITYRULE [[:alpha:]][[:alnum:]]*
 
 
 
-{IDENTITYRULE}   {return IDENTIFIER;}
+{IDENTITYRULE}   {yylval.valString = strdup(yytext); return IDENTIFIER;}
 
 
 .          {
