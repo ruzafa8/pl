@@ -3,6 +3,7 @@
     #include <string.h>
     void yyerror (char const *);
     extern int yylineno;
+    extern int yylex();
 %}
 
 %union{
@@ -25,8 +26,8 @@
 %token FALSE
 
 %left <valString> BINARYOP
-%left "+"  "-"
-%left "*"  "/"
+%left PLUS  MINUS
+%left MULTIPLICAR  DIVIDE
 %precedence NEG   /* negation--unary minus */
 
 %start S
@@ -47,34 +48,42 @@ sentence:
   | expression
 
 varDecl:
-  IDENTIFIER ASSIGNTOK TYPETOK EQUALS expression    {printf("Variable s Type t =");}
-  | IDENTIFIER ASSIGNTOK TYPETOK                    {printf("Variable s Type t (noVal)\n");}
-  | IDENTIFIER ASSIGEQUALS expression               {printf("Variable s, auto, =");}
+  IDENTIFIER ASSIGNTOK TYPETOK EQUALS expression    {printf("Variable %s Type %s = \n", $1, $3);}
+  | IDENTIFIER ASSIGNTOK TYPETOK                    {printf("Variable %s Type %s (noVal)\n", $1, $3);}
+  | IDENTIFIER ASSIGEQUALS expression               {printf("Variable %s, auto, = \n", $1);}
 ;
 
 varAssign:
-  IDENTIFIER EQUALS expression                      {printf("Variable s =");}
+  IDENTIFIER EQUALS expression                      {printf("Variable %s =", $1);}
 ;
 
 literal:
   NUMBER | STRING | TRUE | FALSE
 ;
-
+/*
 expression:
   OPPARTH expression CLOSPARTH                      {printf("(s)");}
-  | expression "+" expression
-  | expression "-" expression
-  | expression "*" expression
-  | expression "/" expression
-  | '-' expression  %prec NEG                       {printf("-_");}
+  | expression PLUS expression
+  | expression MINUS expression
+  | expression MULTIPLICAR expression
+  | expression DIVIDE expression
+  | MINUS expression  %prec NEG                       {printf("-_");}
   | binaryOp
   | IDENTIFIER                                      {printf("Identifier s");}
   | literal                                         {printf("Literal: s");}
 ;
+*/
 
+expression: expression PLUS t | t
+t: t MINUS f | f
+f: f MULTIPLICAR g | g
+g: g DIVIDE h | h
+h: h BINARYOP i | i
+i: OPPARTH expression CLOSPARTH | literal | IDENTIFIER
+/*
 binaryOp:
   expression BINARYOP expression
-
+*/
 %%
 void yyerror (char const *message) { fprintf (stderr, "%s[%d]\n", message,yylineno);}
 
@@ -82,7 +91,7 @@ int main(int argc, char ** argv) {
   int ret;
   extern FILE *yyin;
 
-  if(argc >= 2){   
+  if(argc >= 2){
       // open a file handle to a particular file:
       FILE *myfile = fopen(argv[1], "r");
       // make sure it's valid:

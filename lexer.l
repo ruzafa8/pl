@@ -8,41 +8,41 @@ WS [ \t\n]
 
 NAMELITERAL [:alpha:]
 
-NUMS [:digit:]+
+NUMS [[:digit:]]+
 CARS [:alpha:]+
 NYCS [[:alnum:][:space:]]+
 
 
-BINARYOP [\+\-\*\/"and""or"]
+BINARYOP [\+\-\*\/]|(and)|(or)
 OPPAR [(]
 CLOSEPAR )
 
-IDENTITYRULE [:alpha:]+[:alnum:]*
+IDENTITYRULE [[:alpha:]][[:alnum:]]*
 %%
 
 {WS}*            // Caracteres escapados
 
-\"{NYCS}\"       {yyval.valString = strdup(yytext); return STRING;}
+\"{NYCS}\"       {yylval.valString = strdup(yytext); return STRING;}
 {OPPAR}          {return OPPARTH;}
 ")"              {return CLOSPARTH;}
 ":"              {return ASSIGNTOK;}
 "="              {return EQUALS;}
 ":="             {return ASSIGEQUALS;}
-"Entero"         {yyval.valString = strdup(yytext); return TYPEOK;}
-"Decimal"        {yyval.valString = strdup(yytext); return TYPEOK;}
-"Proposicion"    {yyval.valString = strdup(yytext); return TYPEOK;}
-"Letra"          {yyval.valString = strdup(yytext); return TYPEOK;}
+"Entero"         {yylval.valString = strdup(yytext); return TYPETOK;}
+"Decimal"        {yylval.valString = strdup(yytext); return TYPETOK;}
+"Proposicion"    {yylval.valString = strdup(yytext); return TYPETOK;}
+"Letra"          {yylval.valString = strdup(yytext); return TYPETOK;}
 "Verdadero"      {return TRUE;}
 "Falso"          {return FALSE;}
-"+"              {return "+";}
-"-"              {return "-";}
-"*"              {return "*";}
-"/"              {return "/";}
+"+"              {return PLUS;}
+"-"              {return MINUS;}
+"*"              {return MULTIPLICAR;}
+"/"              {return DIVIDE;}
 {NUMS}           {return NUMBER;}
 
 
 
-{IDENTITYRULE}   {return IDENTIFIER;}
+{IDENTITYRULE}   {yylval.valString = strdup(yytext); return IDENTIFIER;}
 
 
 .          {
