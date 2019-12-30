@@ -7,8 +7,12 @@
 %}
 
 %union{
-    char* valString;
-    int valInt;
+  char * valString;
+  Expression * expr;
+}
+
+%code requires {
+  #include "expression.h"
 }
 
 %locations
@@ -18,23 +22,18 @@
 %token <valString> TYPETOK           //Enum?
 %token EQUALS
 %token ASSIGEQUALS
-%token OPPARTH
-%token CLOSPARTH
-%token <valInt> NUMBER
 %token <valString> STRING
-%token TRUE
-%token FALSE
+
 
 %left <valString> BINARYOP
-%left PLUS  MINUS
-%left MULTIPLICAR  DIVIDE
-%precedence NEG   /* negation--unary minus */
+%token PLUS MINUS BY DIVIDE OPPARTH CLOSPARTH
+%token <expr> ENTERO DOBLE CARACTER PROPOSICION
 
 %start S
 %% /* grammar */
 
 S:
-  %empty            {printf("Empty\n");}
+  /* %empty */            {printf("Empty\n");}
   | sentences ;
 ;
 
@@ -58,7 +57,7 @@ varAssign:
 ;
 
 literal:
-  NUMBER | STRING | TRUE | FALSE
+  ENTERO | STRING | DOBLE | CARACTER | PROPOSICION
 ;
 /*
 expression:
@@ -76,10 +75,11 @@ expression:
 
 expression: expression PLUS t | t
 t: t MINUS f | f
-f: f MULTIPLICAR g | g
+f: f BY g | g
 g: g DIVIDE h | h
 h: h BINARYOP i | i
-i: OPPARTH expression CLOSPARTH | literal | IDENTIFIER
+i: MINUS j | j
+j: OPPARTH expression CLOSPARTH | literal | IDENTIFIER
 /*
 binaryOp:
   expression BINARYOP expression

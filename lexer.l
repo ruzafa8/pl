@@ -4,6 +4,7 @@
 %}
 %option noyywrap
 %option yylineno
+
 WS [ \t\n]
 
 NAMELITERAL [:alpha:]
@@ -14,17 +15,20 @@ NYCS [[:alnum:][:space:]]+
 
 
 BINARYOP [\+\-\*\/]|(and)|(or)
-OPPAR [(]
-CLOSEPAR )
+
 
 IDENTITYRULE [[:alpha:]][[:alnum:]]*
 %%
 
 {WS}*            // Caracteres escapados
 
-\"{NYCS}\"       {yylval.valString = strdup(yytext); return STRING;}
-{OPPAR}          {return OPPARTH;}
-")"              {return CLOSPARTH;}
+\"{NYCS}\" {
+  char * res = (char *) malloc(strlen(yytext));
+  strncpy(res, yytext + 1, strlen(yytext) - 2);
+  yylval.valString = res;
+  return STRING;
+}
+
 ":"              {return ASSIGNTOK;}
 "="              {return EQUALS;}
 ":="             {return ASSIGEQUALS;}
@@ -32,13 +36,35 @@ IDENTITYRULE [[:alpha:]][[:alnum:]]*
 "Decimal"        {yylval.valString = strdup(yytext); return TYPETOK;}
 "Proposicion"    {yylval.valString = strdup(yytext); return TYPETOK;}
 "Letra"          {yylval.valString = strdup(yytext); return TYPETOK;}
-"Verdadero"      {return TRUE;}
-"Falso"          {return FALSE;}
+
+"("              {return OPPARTH; /* RECONOCIMIENTO DE OPERADORES BASICOS*/}
+")"              {return CLOSPARTH;}
 "+"              {return PLUS;}
 "-"              {return MINUS;}
-"*"              {return MULTIPLICAR;}
+"*"              {return BY;}
 "/"              {return DIVIDE;}
-{NUMS}           {return NUMBER;}
+
+
+\'[:alnum:]\' { // -------- RECONOCIMIENTO DE TIPOS BASICOS --------
+  yylval.expr = createChar(yytext[1]);
+  return CARACTER;
+}
+"Verdadero" {
+  yylval.expr = createBool(TRUE);
+  return PROPOSICION;
+}
+"Falso" {
+  yylval.expr = createBool(FALSE);
+  return PROPOSICION;
+}
+{NUMS}\.{NUMS} {
+  yylval.expr = createDouble(atof(yytext));
+  return DOBLE;
+}
+{NUMS} {
+  yylval.expr = createInt(atoi(yytext));
+  return ENTERO;
+}
 
 
 
