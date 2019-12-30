@@ -1,6 +1,13 @@
 %{
     #include <stdio.h>
     #include <string.h>
+
+    #ifdef PAR_DEBUG
+    #define DEBUG_PRINT_PAR(x) printf("%s",x)
+    #else
+    #define DEBUG_PRINT_PAR(x)
+    #endif
+
     void yyerror (char const *);
     extern int yylineno;
     extern int yylex();
@@ -34,13 +41,13 @@
 %% /* grammar */
 
 S:
-  %empty            {printf("Empty\n");}
+  %empty            {DEBUG_PRINT_PAR("Empty\n");}
   | sentences ;
 ;
 
 sentences:
-  sentence              {printf("Sentence:\n");}
-  | sentence sentences  {printf("Sentence:\n");}
+  sentence              {DEBUG_PRINT_PAR("Sentence:\n");}
+  | sentence sentences  {DEBUG_PRINT_PAR("Sentence:\n");}
 
 sentence:
   varDecl
@@ -62,15 +69,15 @@ literal:
 ;
 /*
 expression:
-  OPPARTH expression CLOSPARTH                      {printf("(s)");}
+  OPPARTH expression CLOSPARTH                      {DEBUG_PRINT_PAR("(s)");}
   | expression PLUS expression
   | expression MINUS expression
   | expression MULTIPLICAR expression
   | expression DIVIDE expression
-  | MINUS expression  %prec NEG                       {printf("-_");}
+  | MINUS expression  %prec NEG                       {DEBUG_PRINT_PAR("-_");}
   | binaryOp
-  | IDENTIFIER                                      {printf("Identifier s");}
-  | literal                                         {printf("Literal: s");}
+  | IDENTIFIER                                      {DEBUG_PRINT_PAR("Identifier s");}
+  | literal                                         {DEBUG_PRINT_PAR("Literal: s");}
 ;
 */
 
@@ -80,6 +87,7 @@ f: f MULTIPLICAR g | g
 g: g DIVIDE h | h
 h: h BINARYOP i | i
 i: OPPARTH expression CLOSPARTH | literal | IDENTIFIER
+
 /*
 binaryOp:
   expression BINARYOP expression
