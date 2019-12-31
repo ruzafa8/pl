@@ -1,52 +1,41 @@
 #ifndef EXPRESSION_H_INCLUDED
 #define EXPRESSION_H_INCLUDED
 
-#include<stdio.h>
-#include<stdlib.h>
+#include <stdlib.h>
+#include <stdio.h>
 #include "error.h"
 
 typedef enum {
-    FALSE, TRUE
-} Boolean;
+	FALSE, TRUE
+}Bool;
 
-typedef enum {
-    INTEGER,
-    CHARACTER,
-    DOUBLE,
-    BOOLEAN,
-    ARRAY,
-    UNKNOWN
-} Typename;
+typedef union{
+	int _int;
+	char _char;
+	double _double;
+	Bool _bool;
+}Value;
 
-typedef struct S_Type {
-    Typename name;
-    struct S_Type* next;
-}Type;
-
-typedef struct{
-    int size;
-    Value * value;
-}Array
-
-typedef union {
-    int int_value;
-    char char_value;
-    double double_value;
-    Boolean boolean_value;
-    Array* array_value;
-} Value;
+typedef enum{
+	INT, CHAR, DOUBLE, BOOL, UNKNOWN
+} Type;
 
 typedef struct {
-    Type* type;
-    Value val;
+	Type type;
+	Value value;
 } Expression;
+Expression * create(Type type);
+Expression * createInt(int value);
+Expression * createDouble(double value);
+Expression * createChar(char value);
+Expression * createBool(Bool value);
 
-Expression * createExpression();
-Expression * createIntegerExpression(int value);
-Expression * createCharacterExpression(char value);
-Expression * createDoubleExpression(double value);
-Expression * createBooleanExpression(Boolean value);
-Expression * arrayConstructor(Expression* e, int len);
+EXIT_CODE getInt(Expression * expression, int* value);
+EXIT_CODE getDouble(Expression * expression, double *value);
+EXIT_CODE getChar(Expression * expression, char *value);
+EXIT_CODE getBool(Expression * expression, Bool *value);
 
+Type getType(Expression* e);
+void printExpression(Expression *e);
 
-#endif // EXPRESSION_H_INCLUDED
+#endif

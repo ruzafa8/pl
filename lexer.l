@@ -13,6 +13,7 @@
 %}
 %option noyywrap
 %option yylineno
+
 WS [ \t\n]
 
 NAMELITERAL [:alpha:]
@@ -23,17 +24,21 @@ NYCS [[:alnum:][:space:]]+
 
 
 BINARYOP [\+\-\*\/]|(and)|(or)
-OPPAR [(]
-CLOSEPAR )
+
 
 IDENTITYRULE [[:alpha:]][[:alnum:]]*
 %%
 
 {WS}*            // Caracteres escapados
 
-\"{NYCS}\"       {yylval.valString = strdup(yytext); DEBUG_PRINT_LEX(yylval.valString); return STRING;}
-{OPPAR}          {DEBUG_PRINT_LEX("("); return OPPARTH;}
-")"              {DEBUG_PRINT_LEX(")"); return CLOSPARTH;}
+\"{NYCS}\" {
+  char * res = (char *) malloc(strlen(yytext));
+  strncpy(res, yytext + 1, strlen(yytext) - 2);
+  yylval.valString = res;
+  DEBUG_PRINT_LEX(res);
+  return STRING;
+}
+
 ":"              {DEBUG_PRINT_LEX(":"); return ASSIGNTOK;}
 "="              {DEBUG_PRINT_LEX("="); return EQUALS;}
 ":="             {DEBUG_PRINT_LEX(":="); return ASSIGEQUALS;}
@@ -41,13 +46,41 @@ IDENTITYRULE [[:alpha:]][[:alnum:]]*
 "Decimal"        {yylval.valString = strdup(yytext); DEBUG_PRINT_LEX(yylval.valString); return TYPETOK;}
 "Proposicion"    {yylval.valString = strdup(yytext); DEBUG_PRINT_LEX(yylval.valString); return TYPETOK;}
 "Letra"          {yylval.valString = strdup(yytext); DEBUG_PRINT_LEX(yylval.valString); return TYPETOK;}
-"Verdadero"      {DEBUG_PRINT_LEX("Verdadero"); return TRUE;}
-"Falso"          {DEBUG_PRINT_LEX("Falso"); return FALSE;}
+
+"("              {DEBUG_PRINT_LEX("("); return OPPARTH; /* RECONOCIMIENTO DE OPERADORES BASICOS*/}
+")"              {DEBUG_PRINT_LEX(")"); return CLOSPARTH;}
 "+"              {DEBUG_PRINT_LEX("+"); return PLUS;}
 "-"              {DEBUG_PRINT_LEX("-"); return MINUS;}
-"*"              {DEBUG_PRINT_LEX("*"); return MULTIPLICAR;}
+"*"              {DEBUG_PRINT_LEX("*"); return BY;}
 "/"              {DEBUG_PRINT_LEX("/"); return DIVIDE;}
-{NUMS}           {DEBUG_PRINT_LEX("NUMS(?)"); return NUMBER;}
+
+
+
+\'[:alnum:]\' { // -------- RECONOCIMIENTO DE TIPOS BASICOS --------
+  yylval.expr = createChar(yytext[1]);
+  DEBUG_PRINT_LEX(yytext[1]);
+  return CARACTER;
+}
+"Verdadero" {
+  yylval.expr = createBool(TRUE);
+  DEBUG_PRINT_LEX("Verdadero");
+  return PROPOSICION;
+}
+"Falso" {
+  yylval.expr = createBool(FALSE);
+  DEBUG_PRINT_LEX("Falso");
+  return PROPOSICION;
+}
+{NUMS}\.{NUMS} {
+  yylval.expr = createDouble(atof(yytext));
+  DEBUG_PRINT_LEX(yytext);
+  return DOBLE;
+}
+{NUMS} {
+  yylval.expr = createInt(atoi(yytext));
+  DEBUG_PRINT_LEX(yytext);
+  return ENTERO;
+}
 
 
 
