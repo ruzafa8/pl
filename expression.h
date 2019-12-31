@@ -14,11 +14,13 @@ typedef union{
 	char _char;
 	double _double;
 	Bool _bool;
-}Value;
+} Value;
 
 typedef enum{
 	INT, CHAR, DOUBLE, BOOL, UNKNOWN
 } Type;
+
+static const char * strType[] = {"Entero","Caracter","Decimal", "Proposicion"};
 
 typedef struct {
 	Type type;
