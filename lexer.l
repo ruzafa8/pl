@@ -47,6 +47,9 @@ IDENTITYRULE [[:alpha:]][[:alnum:]]*
 "Proposicion"    {yylval.valString = strdup(yytext); DEBUG_PRINT_LEX("%s",yylval.valString); return TYPETOK;}
 "Letra"          {yylval.valString = strdup(yytext); DEBUG_PRINT_LEX("%s",yylval.valString); return TYPETOK;}
 
+
+"imprime"        {DEBUG_PRINT_LEX("%s","imprime"); return IMPRIMIR; /* Comandos */}
+
 "("              {DEBUG_PRINT_LEX("%s","("); return OPPARTH; /* RECONOCIMIENTO DE OPERADORES BASICOS*/}
 ")"              {DEBUG_PRINT_LEX("%s",")"); return CLOSPARTH;}
 "+"              {DEBUG_PRINT_LEX("%s","+"); return PLUS;}

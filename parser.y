@@ -25,6 +25,7 @@
 %locations
 
 %token <valString> IDENTIFIER
+%token IMPRIMIR
 %token ASSIGNTOK
 %token <valString> TYPETOK           //Enum?
 %token EQUALS
@@ -54,6 +55,10 @@ sentence:
   varDecl
   | varAssign
   | expression
+  | IMPRIMIR expression { 
+      DEBUG_PRINT_PAR("Imprimir:\n");
+      printExpression($2);
+    }
 
 varDecl:
   IDENTIFIER ASSIGNTOK TYPETOK EQUALS expression {
