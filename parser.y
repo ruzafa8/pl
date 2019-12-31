@@ -182,13 +182,7 @@ expression:
 ;
 */
 
-expression: expression PLUS t | t
-t: t MINUS f | f
-f: f BY g | g
-g: g DIVIDE h | h
-h: h BINARYOP i | i
-i: MINUS j | j
-j: OPPARTH expression CLOSPARTH | literal | IDENTIFIER
+
 /*
 binaryOp:
   expression BINARYOP expression
