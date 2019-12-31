@@ -1,7 +1,7 @@
 %{
   #include <stdio.h>
   #include "y.tab.h"
-  
+
   #define LEX_DEBUG
 
   #ifdef LEX_DEBUG
@@ -42,10 +42,10 @@ IDENTITYRULE [[:alpha:]][[:alnum:]]*
 ":"              {DEBUG_PRINT_LEX("%s",":"); return ASSIGNTOK;}
 "="              {DEBUG_PRINT_LEX("%s","="); return EQUALS;}
 ":="             {DEBUG_PRINT_LEX("%s",":="); return ASSIGEQUALS;}
-"Entero"         {yylval.valString = strdup(yytext); DEBUG_PRINT_LEX("%s",yylval.valString); return TYPETOK;}
-"Decimal"        {yylval.valString = strdup(yytext); DEBUG_PRINT_LEX("%s",yylval.valString); return TYPETOK;}
-"Proposicion"    {yylval.valString = strdup(yytext); DEBUG_PRINT_LEX("%s",yylval.valString); return TYPETOK;}
-"Letra"          {yylval.valString = strdup(yytext); DEBUG_PRINT_LEX("%s",yylval.valString); return TYPETOK;}
+"Entero"         {yylval.type = INT; DEBUG_PRINT_LEX("%s",yylval.valString); return TYPETOK;}
+"Decimal"        {yylval.type = DOUBLE; DEBUG_PRINT_LEX("%s",yylval.valString); return TYPETOK;}
+"Proposicion"    {yylval.type = BOOL; DEBUG_PRINT_LEX("%s",yylval.valString); return TYPETOK;}
+"Letra"          {yylval.type = CHAR; DEBUG_PRINT_LEX("%s",yylval.valString); return TYPETOK;}
 
 
 "imprime"        {DEBUG_PRINT_LEX("%s","imprime"); return IMPRIMIR; /* Comandos */}

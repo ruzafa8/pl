@@ -1,6 +1,7 @@
 %{
     #include <stdio.h>
     #include <string.h>
+    #include "hash_table.h"
 
     #ifdef PAR_DEBUG
     #define DEBUG_PRINT_PAR(x) printf("%s",x)
@@ -11,15 +12,17 @@
     void yyerror (char const *);
     extern int yylineno;
     extern int yylex();
+    Table table;
 %}
 
 %union{
   char * valString;
+  Type type;
   Expression * expr;
 }
 
 %code requires {
-  #include "expression.h"
+  #include "hash_table.h"
 }
 
 %locations
@@ -27,7 +30,7 @@
 %token <valString> IDENTIFIER
 %token IMPRIMIR
 %token ASSIGNTOK
-%token <valString> TYPETOK           //Enum?
+%token <type> TYPETOK           //Enum?
 %token EQUALS
 %token ASSIGEQUALS
 %token <valString> STRING
@@ -55,27 +58,90 @@ sentence:
   varDecl
   | varAssign
   | expression
-  | IMPRIMIR expression { 
+  | IMPRIMIR expression {
       DEBUG_PRINT_PAR("Imprimir:\n");
       printExpression($2);
     }
 
 varDecl:
   IDENTIFIER ASSIGNTOK TYPETOK EQUALS expression {
-    printf("Variable %s Type %s = ", $1, $3);
+    printf("Variable %s Type %s = ", $1, strType[$3]);
     printExpression($5);
+    Type t = getType($5);
+    if($3 != t){
+      printf("ERROR, TIPOS NO COINCIDEN");
+      return -1;
+    }
+    if(t == INT){
+      addInt(table, $1, $5->value._int);
+    } else if(t == DOUBLE){
+      addDouble(table, $1, $5->value._double);
+    } else if (t == BOOL) {
+      addBool(table, $1, $5->value._bool);
+    } else if( t == CHAR) {
+      addChar(table, $1, $5->value._char);
+    }
 }
   | IDENTIFIER ASSIGNTOK TYPETOK {
-    printf("Variable %s Type %s (noVal)\n", $1, $3);
+    printf("Variable %s Type %s (default val)\n", $1, strType[$3]);
+    if($3 == INT){
+      addDefaultInt(table, $1);
+    } else if($3 == DOUBLE){
+      addDefaultDouble(table, $1);
+    } else if ($3 == BOOL) {
+      addDefaultBool(table, $1);
+    } else if($3 == CHAR) {
+      addDefaultChar(table, $1);
+    }
 }
   | IDENTIFIER ASSIGEQUALS expression {
-    printf("Variable %s, auto, = \n", $1);
+    Type t = getType($3);
+    printf("Variable %s, auto, %s= \n", $1, strType[t]);
     printExpression($3);
+    if(t == INT){
+      addInt(table, $1, $3->value._int);
+    } else if(t == DOUBLE){
+      addDouble(table, $1, $3->value._double);
+    } else if (t == BOOL) {
+      addBool(table, $1, $3->value._bool);
+    } else if( t == CHAR) {
+      addChar(table, $1, $3->value._char);
+    }
 }
 ;
 
 varAssign:
-  IDENTIFIER EQUALS expression                      {printf("Variable %s =", $1);}
+  IDENTIFIER EQUALS expression {
+    Expression *e;
+    EXIT_CODE code;
+    switch(getType($3)){
+      case INT:
+        code = changeInt(table,$1,$3->value._int);
+        break;
+      case BOOL:
+        code = changeBool(table,$1,$3->value._bool);
+        break;
+      case CHAR:
+        code = changeChar(table,$1,$3->value._char);
+        break;
+      case DOUBLE:
+        code = changeDouble(table,$1,$3->value._double);
+        break;
+    }
+    switch(code){
+      case VAR_NOT_FOUND_ERROR:
+        printf("ERROR, VARIABLE %s no existe",$1);
+        break;
+      case TYPE_ERROR:
+        printf("ERROR, a la variable %s no es de tipo %s", $1,strType[getType($3)]);
+        break;
+      default: //SUCCESS
+        DEBUG_PRINT_PAR("VARIABLE MODIFICADA CON ÉXITO");
+    }
+
+
+    printf("Variable %s =", $1);
+  }
 ;
 
 expression: expression PLUS t {
@@ -147,7 +213,7 @@ g: g DIVIDE h {
   | h {$$ = $1;}
   ;
 h: h BINARYOP i {
-  printf("NOT IMPLEMENTED YET");
+  yyerror("NOT IMPLEMENTED YET");
   return -1;
 }
   | i {$$ = $1;}
@@ -167,7 +233,11 @@ i: MINUS j {
   ;
 j: OPPARTH expression CLOSPARTH {$$ = $2;}
   | literal {$$ = $1;}
-  //| IDENTIFIER
+  | IDENTIFIER {
+    Expression * e;
+    valueOf(table, $1, &e);
+    $$ = e;
+  }
   ;
 literal:
   ENTERO | DOBLE | CARACTER | PROPOSICION {$$ = $1;}
@@ -211,6 +281,7 @@ int main(int argc, char ** argv) {
       yyin = myfile;
 
       // lex through the input:
+      table = createTable();
       ret = yyparse();
       fclose(yyin);
       return ret;
