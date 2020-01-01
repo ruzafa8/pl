@@ -4,11 +4,17 @@
     #include "hash_table.h"
 
     #ifdef PAR_DEBUG
-    #define DEBUG_PRINT_PAR(x) printf("%s",x)
+    #define DEBUG_PRINT_PAR(x) printf(x)
+    #define DEBUG_PRINT_EXPRESSION(x) printExpression(x)
+    #define DEBUG_MODE 0
     #else
     #define DEBUG_PRINT_PAR(x)
+    #define DEBUG_PRINT_EXPRESSION(x)
+    #define DEBUG_MODE 1
     #endif
 
+    int readExitCodeType(EXIT_CODE, Type, Type);
+    int readExitCodeVariables(EXIT_CODE, char *, Type, Type);
     void yyerror (char const *);
     extern int yylineno;
     extern int yylex();
@@ -65,82 +71,68 @@ sentence:
 
 varDecl:
   IDENTIFIER ASSIGNTOK TYPETOK EQUALS expression {
-    printf("Variable %s Type %s = ", $1, strType[$3]);
-    printExpression($5);
+    EXIT_CODE code;
     Type t = getType($5);
     if($3 != t){
-      printf("ERROR, TIPOS NO COINCIDEN");
-      return -1;
+      code = TYPE_DOESNT_AGREE;
+    } else switch(t){
+      case    INT: code = addInt(table, $1, $5->value._int);       break;
+      case DOUBLE: code = addDouble(table, $1, $5->value._double); break;
+      case   BOOL: code = addBool(table, $1, $5->value._bool);     break;
+      case   CHAR: code = addChar(table, $1, $5->value._char);     break;
+      default    : code = TYPE_NOT_EXISTS;
     }
-    if(t == INT){
-      addInt(table, $1, $5->value._int);
-    } else if(t == DOUBLE){
-      addDouble(table, $1, $5->value._double);
-    } else if (t == BOOL) {
-      addBool(table, $1, $5->value._bool);
-    } else if( t == CHAR) {
-      addChar(table, $1, $5->value._char);
+    if(readExitCodeVariables(code, $1, t, $3) == 1){
+      return -1;
     }
 }
   | IDENTIFIER ASSIGNTOK TYPETOK {
-    printf("Variable %s Type %s (default val)\n", $1, strType[$3]);
-    if($3 == INT){
-      addDefaultInt(table, $1);
-    } else if($3 == DOUBLE){
-      addDefaultDouble(table, $1);
-    } else if ($3 == BOOL) {
-      addDefaultBool(table, $1);
-    } else if($3 == CHAR) {
-      addDefaultChar(table, $1);
+    EXIT_CODE code;
+    switch($3){
+      case    INT: code = addDefaultInt(table, $1);    break;
+      case DOUBLE: code = addDefaultDouble(table, $1); break;
+      case   BOOL: code = addDefaultBool(table, $1);   break;
+      case   CHAR: code = addDefaultChar(table, $1);   break;
+      default    : code = TYPE_NOT_EXISTS;
+    }
+    if(readExitCodeVariables(code, $1, $3 ,$3) == 1){
+      return -1;
     }
 }
   | IDENTIFIER ASSIGEQUALS expression {
+    EXIT_CODE code;
     Type t = getType($3);
-    printf("Variable %s, auto, %s= \n", $1, strType[t]);
-    printExpression($3);
-    if(t == INT){
-      addInt(table, $1, $3->value._int);
-    } else if(t == DOUBLE){
-      addDouble(table, $1, $3->value._double);
-    } else if (t == BOOL) {
-      addBool(table, $1, $3->value._bool);
-    } else if( t == CHAR) {
-      addChar(table, $1, $3->value._char);
+    switch(t){
+      case    INT: code = addInt(table, $1, $3->value._int);       break;
+      case DOUBLE: code = addDouble(table, $1, $3->value._double); break;
+      case   BOOL: code = addBool(table, $1, $3->value._bool);     break;
+      case   CHAR: code = addChar(table, $1, $3->value._char);     break;
+      default    : code = TYPE_NOT_EXISTS;
     }
-}
+    if(readExitCodeVariables(code, $1,t,t) == 1){
+      return -1;
+    }
+  }
+  | IDENTIFIER ASSIGNTOK {
+    EXIT_CODE code = add(table, $1);
+  }
 ;
 
 varAssign:
   IDENTIFIER EQUALS expression {
-    Expression *e;
     EXIT_CODE code;
     switch(getType($3)){
-      case INT:
-        code = changeInt(table,$1,$3->value._int);
-        break;
-      case BOOL:
-        code = changeBool(table,$1,$3->value._bool);
-        break;
-      case CHAR:
-        code = changeChar(table,$1,$3->value._char);
-        break;
-      case DOUBLE:
-        code = changeDouble(table,$1,$3->value._double);
-        break;
+      case    INT: code = changeInt(table,$1,$3->value._int); break;
+      case   BOOL: code = changeBool(table,$1,$3->value._bool); break;
+      case   CHAR: code = changeChar(table,$1,$3->value._char); break;
+      case DOUBLE: code = changeDouble(table,$1,$3->value._double); break;
+      default    : code = TYPE_NOT_EXISTS;
     }
-    switch(code){
-      case VAR_NOT_FOUND_ERROR:
-        printf("ERROR, VARIABLE %s no existe",$1);
-        break;
-      case TYPE_ERROR:
-        printf("ERROR, a la variable %s no es de tipo %s", $1,strType[getType($3)]);
-        break;
-      default: //SUCCESS
-        DEBUG_PRINT_PAR("VARIABLE MODIFICADA CON ÉXITO");
+    Expression *e;
+    valueOf(table, $1, &e);
+    if(readExitCodeVariables(code, $1, getType($3), getType(e)) == 1){
+      return -1;
     }
-
-
-    printf("Variable %s =", $1);
   }
 ;
 
@@ -154,8 +146,12 @@ expression: expression PLUS t {
     $$ = createDouble($1->value._int + $3->value._double);
   } else if (e == DOUBLE && t == INT) {
     $$ = createDouble($1->value._double + $3->value._int);
+  } else if(e == INT || e == DOUBLE || e == BOOL || e == CHAR &&
+            t == INT || t == DOUBLE || t == BOOL || t == CHAR){
+    readExitCodeType(TYPE_ERROR,e,t);
+    return -1;
   } else {
-    printf("Error, de tipado. No es posible sumar un %s con un %s",strType[e], strType[t]);
+    readExitCodeType(TYPE_DOESNT_AGREE, e,t);
     return -1;
   }
 }
@@ -171,8 +167,12 @@ t: t MINUS f {
     $$ = createDouble($1->value._int - $3->value._double);
   } else if (t == DOUBLE && f == INT) {
     $$ = createDouble($1->value._double - $3->value._int);
+  } else if(f == INT || f == DOUBLE || f == BOOL || f == CHAR &&
+            t == INT || t == DOUBLE || t == BOOL || t == CHAR){
+    readExitCodeType(TYPE_ERROR,f,t);
+    return -1;
   } else {
-    printf("Error, de tipado. No es posible restar un %s con un %s",strType[t], strType[f]);
+    readExitCodeType(TYPE_DOESNT_AGREE, f,t);
     return -1;
   }
 }
@@ -188,8 +188,12 @@ f: f BY g {
     $$ = createDouble($1->value._int * $3->value._double);
   } else if (f == DOUBLE && g == INT) {
     $$ = createDouble($1->value._double * $3->value._int);
+  } else if(f == INT || f == DOUBLE || f == BOOL || f == CHAR &&
+            g == INT || g == DOUBLE || g == BOOL || g == CHAR){
+    readExitCodeType(TYPE_ERROR,f,g);
+    return -1;
   } else {
-    printf("Error, de tipado. No es posible multiplicar un %s con un %s",strType[f], strType[g]);
+    readExitCodeType(TYPE_DOESNT_AGREE, f,g);
     return -1;
   }
 }
@@ -225,7 +229,7 @@ i: MINUS j {
   } else if (j == DOUBLE){
     $$ = createDouble(-$2->value._double);
   } else {
-    printf("Error, de tipado. No es posible poner un %s negativo",strType[j]);
+    ("Error, de tipado. No es posible poner un %s negativo",strType[j]);
     return -1;
   }
 }
@@ -235,7 +239,10 @@ j: OPPARTH expression CLOSPARTH {$$ = $2;}
   | literal {$$ = $1;}
   | IDENTIFIER {
     Expression * e;
-    valueOf(table, $1, &e);
+    EXIT_CODE code = valueOf(table, $1, &e);
+    if(readExitCodeVariables(code, $1,getType(e),getType(e)) == 1){
+      return -1;
+    }
     $$ = e;
   }
   ;
@@ -243,27 +250,52 @@ literal:
   ENTERO | DOBLE | CARACTER | PROPOSICION {$$ = $1;}
   //| STRING
 ;
-/*
-expression:
-  OPPARTH expression CLOSPARTH                      {DEBUG_PRINT_PAR("(s)");}
-  | expression PLUS expression
-  | expression MINUS expression
-  | expression MULTIPLICAR expression
-  | expression DIVIDE expression
-  | MINUS expression  %prec NEG                       {DEBUG_PRINT_PAR("-_");}
-  | binaryOp
-  | IDENTIFIER                                      {DEBUG_PRINT_PAR("Identifier s");}
-  | literal                                         {DEBUG_PRINT_PAR("Literal: s");}
-;
-*/
 
-
-/*
-binaryOp:
-  expression BINARYOP expression
-*/
 %%
 void yyerror (char const *message) { fprintf (stderr, "%s[%d]\n", message,yylineno);}
+int readExitCodeType(EXIT_CODE code, Type e1, Type e2){
+  int exitCode = 0;
+  char error[100];
+  switch(code){
+    case SUCCESS: DEBUG_PRINT_EXPRESSION(e);break;
+    case TYPE_NOT_EXISTS:
+      sprintf(error,"Error linea %d, el tipo %s no existe\n",yylineno ,strType[e1]);
+      yyerror(error); exitCode = 1; break;
+    case TYPE_ERROR:
+      sprintf(error, "Error linea %d, operación no definida para los tipos %s y %s\n",yylineno ,strType[e1], strType[e2]);
+      yyerror(error); exitCode = 1; break;
+    case TYPE_DOESNT_AGREE:
+      sprintf(error, "Error linea %d, los tipos no coinciden: %s, %s\n",yylineno ,strType[e1], strType[e2]);
+      yyerror(error); exitCode = 1; break;
+    default:
+      yyerror("ERROR DE LA MUERTE");
+      exitCode = 1;
+  }
+  return exitCode;
+}
+int readExitCodeVariables(EXIT_CODE code, char * var, Type exprType ,Type varType){
+  char error[100];
+  int exitCode = 0;
+  switch(code){
+    case SUCCESS:
+      if(DEBUG_MODE){
+        Expression * e;
+        valueOf(table, var, &e);
+        printf("Variable %s Type %s = ", var, strType[getType(e)]);
+        printExpression(e);
+      }
+      break;
+    case VAR_ALREADY_EXISTS_ERROR:
+      sprintf(error,"Error linea %d, la variable %s ya existe\n",yylineno,var);
+      yyerror(error); exitCode = 1; break;
+    case VAR_NOT_FOUND_ERROR:
+      sprintf(error, "Error linea %d, la variable %s no existe",yylineno,var);
+      yyerror(error); exitCode = 1; break;
+    default:
+      exitCode = readExitCodeType(code, exprType, varType);
+  }
+  return code;
+}
 
 int main(int argc, char ** argv) {
   int ret;

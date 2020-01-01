@@ -160,7 +160,8 @@ EXIT_CODE changeInt(const Table table, const char * var, int newValue){
 
 	while(v != NULL && !found){
 		if(strcmp(var,v->name) == 0){
-      if(getType(v->expression) == INT){
+      Type t = getType(v->expression);
+      if(t == INT || t == UNKNOWN){
         v->expression = createInt(newValue);
         code = SUCCESS;
       } else {
@@ -178,7 +179,8 @@ EXIT_CODE changeChar(const Table table, const char * var, char newValue){
 
 	while(v != NULL && !found){
 		if(strcmp(var,v->name) == 0){
-      if(getType(v->expression) == CHAR){
+      Type t = getType(v->expression);
+      if(t == CHAR || t == UNKNOWN){
         v->expression = createChar(newValue);
         code = SUCCESS;
       } else {
@@ -196,7 +198,8 @@ EXIT_CODE changeDouble(const Table table, const char * var, double newValue){
 
 	while(v != NULL && !found){
 		if(strcmp(var,v->name) == 0){
-      if(getType(v->expression) == DOUBLE){
+      Type t = getType(v->expression);
+      if(t == DOUBLE || t == UNKNOWN){
         v->expression = createDouble(newValue);
         code = SUCCESS;
       } else {
@@ -214,7 +217,8 @@ EXIT_CODE changeBool(const Table table, const char * var, Bool newValue){
 
 	while(v != NULL && !found){
 		if(strcmp(var,v->name) == 0){
-      if(getType(v->expression) == BOOL){
+      Type t = getType(v->expression);
+      if(t == BOOL || t == UNKNOWN){
         v->expression = createBool(newValue);
         code = SUCCESS;
       } else {
