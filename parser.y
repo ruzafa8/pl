@@ -4,7 +4,7 @@
     #include "hash_table.h"
 
     #include "bool.h"
-    
+
     #ifdef PAR_DEBUG
     #define DEBUG_PRINT_PAR(x) printf(x)
     #define DEBUG_PRINT_EXPRESSION(x) printExpression(x)
@@ -79,7 +79,7 @@ sentence:
 
 
 while_sentence: MIENTRAS expression HAZ sentences PUNTO {$$ = createWhile($2, $4,yylineno);}
-repeat: REPITE sentences VECES expression PUNTO {$$ = createRepeat($4,$2,yylineno);}
+repeat: REPITE expression VECES sentences PUNTO {$$ = createRepeat($2,$4,yylineno);}
 varDecl:
   IDENTIFIER ASSIGNTOK TYPETOK EQUALS expression {$$ = createDeclAsig($1,$3,$5,yylineno);}
   | IDENTIFIER ASSIGNTOK TYPETOK {$$ = createDecl($1,$3,yylineno);}

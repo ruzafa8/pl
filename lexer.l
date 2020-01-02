@@ -72,6 +72,8 @@ IDENTITYRULE [[:alpha:]][[:alnum:]]*
 "/=" {return NOT_EQTOK;}
 "==" {return DOBLE_EQUALSTOK;}
 
+"repite" {return REPITE;}
+"veces" {return VECES;}
 "mientras" {return MIENTRAS;}
 "haz" {return HAZ;}
 "." {return PUNTO;}
