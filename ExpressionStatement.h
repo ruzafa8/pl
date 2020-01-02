@@ -1,7 +1,7 @@
 #pragma once
 
-#include "statement.h"
-
+#include "expression.h"
+#include "hash_table.h"
 typedef enum {
 	BIN_PLUS, BIN_MINUS, BIN_BY, BIN_DIVIDE, BIN_OR, BIN_AND, BIN_XOR, 
 	BIN_SI, BIN_SII, BIN_LESS, BIN_LESS_EQ, BIN_MORE, BIN_MORE_EQ, 
