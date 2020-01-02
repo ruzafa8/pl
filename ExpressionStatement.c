@@ -39,13 +39,13 @@ Expression * _eval_minus(Expression * rhs, Expression * lhs) {
 Expression * _eval_mult(Expression * rhs, Expression * lhs) {
     Type rhsType = getType(rhs);
     Type lhsType = getType(lhs);
-    if (rhsType == INT && g == INT) {
+    if (rhsType == INT && lhsType == INT) {
         return createInt(rhs->value._int * lhs->value._int);
-    } else if (rhsType == DOUBLE && g == DOUBLE) {
+    } else if (rhsType == DOUBLE && lhsType == DOUBLE) {
         return createDouble(rhs->value._double * lhs->value._double);
-    } else if (rhsType == INT && g == DOUBLE) {
+    } else if (rhsType == INT && lhsType == DOUBLE) {
         return createDouble(rhs->value._int * lhs->value._double);
-    } else if (rhsType == DOUBLE && g == INT) {
+    } else if (rhsType == DOUBLE && lhsType == INT) {
         return createDouble(rhs->value._double * lhs->value._int);
     } else {
         readExitCodeType(TYPE_ERROR,rhsType,lhsType);
@@ -56,13 +56,13 @@ Expression * _eval_mult(Expression * rhs, Expression * lhs) {
 Expression * _eval_div(Expression * rhs, Expression * lhs) {
     Type rhsType = getType(rhs);
     Type lhsType = getType(lhs);
-    if (rhsType == INT && g == INT) {
+    if (rhsType == INT && lhsType == INT) {
         return createInt(rhs->value._int / lhs->value._int);
-    } else if (rhsType == DOUBLE && g == DOUBLE) {
+    } else if (rhsType == DOUBLE && lhsType == DOUBLE) {
         return createDouble(rhs->value._double / lhs->value._double);
-    } else if (rhsType == INT && g == DOUBLE) {
+    } else if (rhsType == INT && lhsType == DOUBLE) {
         return createDouble(rhs->value._int / lhs->value._double);
-    } else if (rhsType == DOUBLE && g == INT) {
+    } else if (rhsType == DOUBLE && lhsType == INT) {
         return createDouble(rhs->value._double / lhs->value._int);
     } else {
         readExitCodeType(TYPE_ERROR,rhsType,lhsType);
@@ -286,21 +286,21 @@ Expression * _un_eval_minus(Expression * e) {
 }
 
 Expression unary_evaluate(Table table, UnExpressionStatement * e) {
-    Expression * e = evaluate(table, e->rhs);
+    Expression * expr = evaluate(table, e->rhs);
 
     switch(e->kind){
-        case(UN_MINUS): return _un_eval_minus(e);
+        case(UN_MINUS): return _un_eval_minus(expr);
     }
 }
 
 Expression evaluate(Table table, ExpressionStatement * e){
     switch(e->_n){
         case UNARY:
-            return unary_evaluate(table, e->_unary);
+            return unary_evaluate(table, e->_e._unary);
         case BINARY:
-            return binary_evaluate(table, e->_binary);
+            return binary_evaluate(table, e->_e._binary);
         case LITERAL:
-            return e->_lit.e;
+            return e->_e._lit.e;
         default:
             printf("Expresion n-arity evaluation error\n");
             exit(-1);
@@ -320,8 +320,8 @@ ExpressionStatement * createBinExpression(BinExpressionKind k, ExpressionStateme
 ExpressionStatement * createUnExpression(UnExpressionKind k, ExpressionStatement * e){
     ExpressionStatement * st = (ExpressionStatement *) malloc(sizeof(ExpressionStatement));
     st->_n = UNARY;
-    st->_e._binary.kind = k;
-    st->_e._binary.e = e;
+    st->_e._unary.kind = k;
+    st->_e._unary.e = e;
 
     return st;
 }
