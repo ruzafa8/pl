@@ -49,6 +49,10 @@ IDENTITYRULE [[:alpha:]][[:alnum:]]*
 
 
 "imprime"        {DEBUG_PRINT_LEX("%s","imprime"); return IMPRIMIR; /* Comandos */}
+"se"             {DEBUG_PRINT_LEX("%s","se"); return IF;}
+"daquela"        {DEBUG_PRINT_LEX("%s","daquela"); return THEN;}
+"se non"         {DEBUG_PRINT_LEX("%s","se non"); return ELSE;}
+
 
 "("              {DEBUG_PRINT_LEX("%s","("); return OPPARTH; /* RECONOCIMIENTO DE OPERADORES BASICOS*/}
 ")"              {DEBUG_PRINT_LEX("%s",")"); return CLOSPARTH;}

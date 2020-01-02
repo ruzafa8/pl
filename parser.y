@@ -36,6 +36,7 @@
 
 %token <valString> IDENTIFIER
 %token IMPRIMIR
+%token IF THEN ELSE
 %token ASSIGNTOK
 %token <type> TYPETOK           //Enum?
 %token EQUALS
@@ -64,6 +65,7 @@ sentence:
   varDecl
   | varAssign
   | expression
+  | conditional
   | IMPRIMIR expression {
       DEBUG_PRINT_PAR("Imprimir:\n");
       printExpression($2);
@@ -135,6 +137,11 @@ varAssign:
     }
   }
 ;
+
+conditional:
+  IF expression THEN sentences {}
+ | IF expression THEN sentences ELSE sentences {}
+
 expression: expression OR o {
   Type e = getType($1), o = getType($3);
   if(e == BOOL && o == BOOL){
@@ -417,6 +424,9 @@ int readExitCodeType(EXIT_CODE code, Type e1, Type e2){
     case SUCCESS: DEBUG_PRINT_EXPRESSION(e);break;
     case TYPE_NOT_EXISTS:
       sprintf(error,"Error linea %d, el tipo %s no existe\n",yylineno ,strType[e1]);
+      yyerror(error); exitCode = 1; break;
+    case CONDITION_NOT_BOOL:
+      sprintf(error, "Error linea %d, operación condicional no definida para el tipo %s\n",yylineno ,strType[e1]);
       yyerror(error); exitCode = 1; break;
     case TYPE_ERROR:
       sprintf(error, "Error linea %d, operación no definida para los tipos %s y %s\n",yylineno ,strType[e1], strType[e2]);
