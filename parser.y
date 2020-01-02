@@ -91,8 +91,8 @@ varAssign: IDENTIFIER EQUALS expression { $$ = createAsig($1, $3,yylineno);}
 ;
 
 conditional:
-  IFTOK expression THENTOK sentences { $$ = createIf($2,$4,yylineno);}
- | IFTOK expression THENTOK sentences ELSETOK sentences {$$ = createIfElse($2,$4,$6,yylineno);}
+  IFTOK expression THENTOK sentences PUNTO { $$ = createIf($2,$4,yylineno);}
+ | IFTOK expression THENTOK sentences ELSETOK sentences PUNTO {$$ = createIfElse($2,$4,$6,yylineno);}
 
 expression: expression ORTOK o {$$ = createBinExpression(BIN_OR, $1, $3);}
  | o {$$ = $1;}

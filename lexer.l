@@ -53,7 +53,6 @@ IDENTITYRULE [[:alpha:]][[:alnum:]]*
 "daquela"        {DEBUG_PRINT_LEX("%s","daquela"); return THENTOK;}
 "se non"         {DEBUG_PRINT_LEX("%s","se non"); return ELSETOK;}
 
-
 "("              {DEBUG_PRINT_LEX("%s","("); return OPPARTH; /* RECONOCIMIENTO DE OPERADORES BASICOS*/}
 ")"              {DEBUG_PRINT_LEX("%s",")"); return CLOSPARTH;}
 "+"              {DEBUG_PRINT_LEX("%s","+"); return PLUSTOK;}
