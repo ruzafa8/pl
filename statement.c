@@ -16,9 +16,10 @@ Statement * createAsig(char * name, Expression * e){
 }
 Statement * createDeclAsig(char *name, Type t, Expression * e){
   Statement * st = (Statement *) malloc(sizeof(Statement));
-  st->type = DECL;
+  st->type = DECL_ASIG;
   st->st._decl_asig.name = strdup(name);
-  st->st._decl_asig.type = type;
+  st->st._decl_asig.type = t;
+  st->st._decl_asig.e = e;
   return st;
 }
 Statement * createPrint(Expression * e){
@@ -27,11 +28,23 @@ Statement * createPrint(Expression * e){
   st->st._print.e = e;
   return st;
 }
-Statement * createWhile();
+Statement * createWhile(Expression * condition, Statement * body){
+  Statement * st = (Statement *) malloc(sizeof(Statement));
+  st->type = WHILE;
+  st->st._while.condition = condition;
+  st->st._while.body = st;
+  return st;
+}
 Statement * createIf();
 Statement * createIfElse();
 
-Statement * join(Statement * s1, Statement * s2);
+Statement * join(Statement * s1, Statement * s2){
+  Statement * st = (Statement *) malloc(sizeof(Statement));
+  st->type = COMPOSE;
+  st->st._compose.s1 = s1;
+  st->st._compose.s2 = s2;
+  return st;
+}
 
 void exec(Table table, Statement * s){
   EXIT_CODE code;
@@ -60,13 +73,22 @@ void exec(Table table, Statement * s){
     case PRINT:
       printExpression(s->st._print.e);
       break;
-    case WHILE: break;
+    case WHILE:
+      if(getType(s->st._while.condition) == BOOL){
+        while(s->st._while.condition->value._bool == TRUE){
+          exec(table,s->st._while.body);
+        }
+      } else{
+        //error
+      }
+
+      break;
     case REPEAT: break;
     case IF: break;
     case IF_ELSE: break;
     case COMPOSE:
-      exec(s->st._compose->s1);
-      exec(s->st._compose->s2);
+      exec(table,s->st._compose.s1);
+      exec(table,s->st._compose.s2);
       break;
   }
 }

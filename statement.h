@@ -3,9 +3,10 @@
 
 #include "hash_table.h"
 
-typedef enum {
+typedef enum  {
 	DECL, ASIG, DECL_ASIG, PRINT, WHILE, REPEAT, IF, IF_ELSE, COMPOSE
 } StatementType;
+
 
 typedef struct {
 	char * name;
@@ -28,7 +29,8 @@ typedef struct {
 } Print;
 
 typedef struct {
-	Expression * e
+	Expression * condition;
+	struct _Statement * body;
 } While;
 
 typedef struct {
@@ -36,18 +38,18 @@ typedef struct {
 
 typedef struct {
 	Expression * cond;
-	Statement *
+	struct _Statement * body;
 } If;
 
 typedef struct {
 	Expression * cond;
-	Statement * if_statement;
-	Statement * else_statement;
+	struct _Statement * if_statement;
+	struct _Statement * else_statement;
 } If_else;
 
 typedef struct {
-	Statement * s1;
-	Statement * s2;
+	struct _Statement * s1;
+	struct _Statement * s2;
 } Compose;
 
 typedef union {
@@ -62,7 +64,7 @@ typedef union {
 	Compose _compose;
 } Statements;
 
-typedef struct {
+typedef struct _Statement {
 	Statements st;
 	StatementType type;
 } Statement;
@@ -71,7 +73,7 @@ Statement * createDecl(char * name, Type type);
 Statement * createAsig(char * name, Expression * e);
 Statement * createDeclAsig(char *name, Type t, Expression * e);
 Statement * createPrint(Expression * e);
-Statement * createWhile();
+Statement * createWhile(Expression * condition, Statement * body);
 Statement * createIf();
 Statement * createIfElse();
 

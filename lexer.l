@@ -49,9 +49,9 @@ IDENTITYRULE [[:alpha:]][[:alnum:]]*
 
 
 "imprime"        {DEBUG_PRINT_LEX("%s","imprime"); return IMPRIMIR; /* Comandos */}
-"se"             {DEBUG_PRINT_LEX("%s","se"); return IF;}
-"daquela"        {DEBUG_PRINT_LEX("%s","daquela"); return THEN;}
-"se non"         {DEBUG_PRINT_LEX("%s","se non"); return ELSE;}
+"se"             {DEBUG_PRINT_LEX("%s","se"); return IFTOK;}
+"daquela"        {DEBUG_PRINT_LEX("%s","daquela"); return THENTOK;}
+"se non"         {DEBUG_PRINT_LEX("%s","se non"); return ELSETOK;}
 
 
 "("              {DEBUG_PRINT_LEX("%s","("); return OPPARTH; /* RECONOCIMIENTO DE OPERADORES BASICOS*/}
@@ -61,7 +61,7 @@ IDENTITYRULE [[:alpha:]][[:alnum:]]*
 "*"              {DEBUG_PRINT_LEX("%s","*"); return BY;}
 "/"              {DEBUG_PRINT_LEX("%s","/"); return DIVIDE;}
 
-"o" {return OR;}
+"o" {return OR; /* OPERADORES BINARIOS*/}
 "y" {return AND;}
 "eo" {return XOR;}
 "si" {return SI;}
@@ -73,6 +73,9 @@ IDENTITYRULE [[:alpha:]][[:alnum:]]*
 "/=" {return NOT_EQ;}
 "==" {return DOBLE_EQUALS;}
 
+"mientras" {return MIENTRAS;}
+"haz" {return HAZ;}
+"." {return PUNTO;}
 
 
 

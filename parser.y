@@ -2,6 +2,7 @@
     #include <stdio.h>
     #include <string.h>
     #include "hash_table.h"
+
     #include "bool.h"
 
     #ifdef PAR_DEBUG
@@ -37,13 +38,14 @@
 
 %code requires {
   #include "hash_table.h"
+  #include "statement.h"
 }
 
 %locations
 
 %token <valString> IDENTIFIER
 %token IMPRIMIR
-%token IF THEN ELSE
+%token IFTOK THENTOK ELSETOK
 %token ASSIGNTOK
 %token <type> TYPETOK           //Enum?
 %token EQUALS
@@ -53,103 +55,60 @@
 %token PLUS MINUS BY DIVIDE OPPARTH CLOSPARTH
 %token OR AND XOR SI SII LESS LESS_EQ MORE MORE_EQ NOT_EQ DOBLE_EQUALS
 %token <expr> ENTERO DOBLE CARACTER PROPOSICION
+%token HAZ MIENTRAS PUNTO
 
 %type <expr> expression literal o p q r s t u v w x y z f g h i
-
+%type <statement> varDecl varAssign sentence sentences while_sentence conditional
 %start S
 %% /* grammar */
 
 S:
   /* %empty */            {DEBUG_PRINT_PAR("Empty\n");}
-  | sentences ;
+  | sentences {exec(table,$1);};
 ;
 
 sentences:
-  sentence              {DEBUG_PRINT_PAR("Sentence:\n");}
-  | sentence sentences  {DEBUG_PRINT_PAR("Sentence:\n");}
+  sentence              {DEBUG_PRINT_PAR("Sentence:\n"); $$ = $1;}
+  | sentence sentences  {DEBUG_PRINT_PAR("Sentence:\n"); $$ = join($1,$2);}
 
 sentence:
   varDecl
-  | varAssign
-  | expression
+  | varAssign {$$ = $1;}
   | conditional
   | IMPRIMIR expression {
       DEBUG_PRINT_PAR("Imprimir:\n");
-      Statement * s = createPrint();
-      s->_print->e = $2;
-      $$ = s;
+      $$ = createPrint($2);
     }
+  | while_sentence  {$$ = $1;}
+  //| repeat
 
+while_sentence: MIENTRAS expression HAZ sentences PUNTO {
+  $$ = createWhile($2, $4);
+}
 varDecl:
   IDENTIFIER ASSIGNTOK TYPETOK EQUALS expression {
-    EXIT_CODE code;
-    Type t = getType($5);
-    if($3 != t){
-      code = TYPE_DOESNT_AGREE;
-    } else switch(t){
-      case    INT: code = addInt(table, $1, $5->value._int);       break;
-      case DOUBLE: code = addDouble(table, $1, $5->value._double); break;
-      case   BOOL: code = addBool(table, $1, $5->value._bool);     break;
-      case   CHAR: code = addChar(table, $1, $5->value._char);     break;
-      default    : code = TYPE_NOT_EXISTS;
-    }
-    if(readExitCodeVariables(code, $1, t, $3) == 1){
-      return -1;
-    }
+    $$ = createDeclAsig($1,$3,$5);
 }
   | IDENTIFIER ASSIGNTOK TYPETOK {
-    EXIT_CODE code;
-    switch($3){
-      case    INT: code = addDefaultInt(table, $1);    break;
-      case DOUBLE: code = addDefaultDouble(table, $1); break;
-      case   BOOL: code = addDefaultBool(table, $1);   break;
-      case   CHAR: code = addDefaultChar(table, $1);   break;
-      default    : code = TYPE_NOT_EXISTS;
-    }
-    if(readExitCodeVariables(code, $1, $3 ,$3) == 1){
-      return -1;
-    }
+    $$ = createDecl($1,$3);
 }
   | IDENTIFIER ASSIGEQUALS expression {
-    EXIT_CODE code;
-    Type t = getType($3);
-    switch(t){
-      case    INT: code = addInt(table, $1, $3->value._int);       break;
-      case DOUBLE: code = addDouble(table, $1, $3->value._double); break;
-      case   BOOL: code = addBool(table, $1, $3->value._bool);     break;
-      case   CHAR: code = addChar(table, $1, $3->value._char);     break;
-      default    : code = TYPE_NOT_EXISTS;
-    }
-    if(readExitCodeVariables(code, $1,t,t) == 1){
-      return -1;
-    }
+    $$ = createDeclAsig($1,getType($3),$3);
   }
   | IDENTIFIER ASSIGNTOK {
-    EXIT_CODE code = add(table, $1);
+    $$ = createDecl($1, UNKNOWN);
   }
 ;
 
 varAssign:
   IDENTIFIER EQUALS expression {
-    EXIT_CODE code;
-    switch(getType($3)){
-      case    INT: code = changeInt(table,$1,$3->value._int); break;
-      case   BOOL: code = changeBool(table,$1,$3->value._bool); break;
-      case   CHAR: code = changeChar(table,$1,$3->value._char); break;
-      case DOUBLE: code = changeDouble(table,$1,$3->value._double); break;
-      default    : code = TYPE_NOT_EXISTS;
-    }
-    Expression *e;
-    valueOf(table, $1, &e);
-    if(readExitCodeVariables(code, $1, getType($3), getType(e)) == 1){
-      return -1;
-    }
+    $$ = createAsig($1, $3);
   }
 ;
 
 conditional:
-  IF expression THEN sentences {}
- | IF expression THEN sentences ELSE sentences {}
+  IFTOK expression THENTOK sentences {}
+ | IFTOK expression THENTOK sentences ELSETOK sentences {}
 
 expression: expression OR o {
   Type e = getType($1), o = getType($3);
