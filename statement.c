@@ -76,6 +76,7 @@ void exec(Table table, Statement * s){
         case DOUBLE: code = addDefaultDouble(table, s->st._decl.name); break;
         case   BOOL: code = addDefaultBool(table, s->st._decl.name);   break;
         case   CHAR: code = addDefaultChar(table, s->st._decl.name);   break;
+        case UNKNOWN: code = add(table,s->st._decl.name);
         default    : code = TYPE_NOT_EXISTS;
       } break;
     case ASIG:
@@ -89,6 +90,7 @@ void exec(Table table, Statement * s){
       } break;
     case DECL_ASIG:
       e = evaluate(table,s->st._decl_asig.e);
+      if(s->st._decl_asig.type == getType(e) || s->st._decl_asig.type == UNKNOWN)
       switch(getType(e)){
         case    INT: code = addInt(table, s->st._decl_asig.name, e->value._int);       break;
         case DOUBLE: code = addDouble(table, s->st._decl_asig.name, e->value._double); break;
