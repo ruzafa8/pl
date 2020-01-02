@@ -99,7 +99,7 @@ void exec(Table table, Statement * s){
         default    : code = TYPE_NOT_EXISTS;
       } break;
     case PRINT:
-      printExpression(table,evaluate(s->st._print.e));
+      printExpression(evaluate(table,s->st._print.e));
       break;
     case WHILE:
       e = evaluate(table,s->st._while.condition);
@@ -125,7 +125,7 @@ void exec(Table table, Statement * s){
       }
       break;
     case IF:
-      e = evaluate(s->st._if.cond);
+      e = evaluate(table,s->st._if.cond);
       if(getType(e) == BOOL){
         if(e->value._bool == TRUE){
           exec(table,s->st._if.body);
@@ -133,7 +133,7 @@ void exec(Table table, Statement * s){
       }
       break;
     case IF_ELSE:
-      e = evaluate(s->st._if_else.cond);
+      e = evaluate(table,s->st._if_else.cond);
       if(getType(e) == BOOL){
         if(e->value._bool == TRUE){
           exec(table,s->st._if_else.if_statement);
