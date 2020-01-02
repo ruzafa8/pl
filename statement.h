@@ -70,16 +70,17 @@ typedef union {
 typedef struct _Statement {
 	Statements st;
 	StatementType type;
+	int line;
 } Statement;
 
-Statement * createDecl(char * name, Type type);
-Statement * createAsig(char * name, ExpressionStatement * e);
-Statement * createDeclAsig(char *name, Type t, ExpressionStatement * e);
-Statement * createPrint(ExpressionStatement * e);
-Statement * createWhile(ExpressionStatement * condition, Statement * body);
-Statement * createRepeat(ExpressionStatement * numIteracions, Statement * body);
-Statement * createIf(ExpressionStatement * condition, Statement * body);
-Statement * createIfElse(ExpressionStatement * condition, Statement * then_st, Statement * else_st);
+Statement * createDecl(char * name, Type type, int line);
+Statement * createAsig(char * name, ExpressionStatement * e, int line);
+Statement * createDeclAsig(char *name, Type t, ExpressionStatement * e, int line);
+Statement * createPrint(ExpressionStatement * e, int line);
+Statement * createWhile(ExpressionStatement * condition, Statement * body, int line);
+Statement * createRepeat(ExpressionStatement * numIteracions, Statement * body, int line);
+Statement * createIf(ExpressionStatement * condition, Statement * body, int line);
+Statement * createIfElse(ExpressionStatement * condition, Statement * then_st, Statement * else_st, int line);
 
 Statement * join(Statement * s1, Statement * s2);
 

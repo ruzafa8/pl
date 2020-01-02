@@ -56,10 +56,10 @@
 %token PLUSTOK MINUSTOK BYTOK DIVIDETOK OPPARTH CLOSPARTH
 %token ORTOK ANDTOK XORTOK SITOK SIITOK LESSTOK LESS_EQTOK MORETOK MORE_EQTOK NOT_EQTOK DOBLE_EQUALSTOK
 %token <expr> ENTERO DOBLE CARACTER PROPOSICION
-%token HAZ MIENTRAS PUNTO
+%token HAZ MIENTRAS PUNTO REPITE VECES
 
 %type <expr> expression literal o p q r s t u v w x y z f g h i
-%type <statement> varDecl varAssign sentence sentences while_sentence conditional
+%type <statement> varDecl varAssign sentence sentences while_sentence conditional repeat
 %start S
 %% /* grammar */
 
@@ -74,25 +74,25 @@ sentences:
 
 sentence:
   varDecl
-  | varAssign | conditional | while_sentence {$$ = $1;}
-  | IMPRIMIR expression {DEBUG_PRINT_PAR("Imprimir:\n");$$ = createPrint($2);}
-  //| repeat
+  | varAssign | conditional | while_sentence | repeat {$$ = $1;}
+  | IMPRIMIR expression {DEBUG_PRINT_PAR("Imprimir:\n");$$ = createPrint($2,yylineno);}
 
-while_sentence: MIENTRAS expression HAZ sentences PUNTO {$$ = createWhile($2, $4);}
 
+while_sentence: MIENTRAS expression HAZ sentences PUNTO {$$ = createWhile($2, $4,yylineno);}
+repeat: REPITE sentences VECES expression PUNTO {$$ = createRepeat($4,$2,yylineno);}
 varDecl:
-  IDENTIFIER ASSIGNTOK TYPETOK EQUALS expression {$$ = createDeclAsig($1,$3,$5);}
-  | IDENTIFIER ASSIGNTOK TYPETOK {$$ = createDecl($1,$3);}
-  | IDENTIFIER ASSIGEQUALS expression {$$ = createDeclAsig($1,UNKNOWN,$3);}
-  | IDENTIFIER ASSIGNTOK {$$ = createDecl($1, UNKNOWN);}
+  IDENTIFIER ASSIGNTOK TYPETOK EQUALS expression {$$ = createDeclAsig($1,$3,$5,yylineno);}
+  | IDENTIFIER ASSIGNTOK TYPETOK {$$ = createDecl($1,$3,yylineno);}
+  | IDENTIFIER ASSIGEQUALS expression {$$ = createDeclAsig($1,UNKNOWN,$3,yylineno);}
+  | IDENTIFIER ASSIGNTOK {$$ = createDecl($1, UNKNOWN,yylineno);}
 ;
 
-varAssign: IDENTIFIER EQUALS expression { $$ = createAsig($1, $3);}
+varAssign: IDENTIFIER EQUALS expression { $$ = createAsig($1, $3,yylineno);}
 ;
 
 conditional:
-  IFTOK expression THENTOK sentences {}
- | IFTOK expression THENTOK sentences ELSETOK sentences {}
+  IFTOK expression THENTOK sentences { $$ = createIf($2,$4,yylineno);}
+ | IFTOK expression THENTOK sentences ELSETOK sentences {$$ = createIfElse($2,$4,$6,yylineno);}
 
 expression: expression ORTOK o {$$ = createBinExpression(BIN_OR, $1, $3);}
  | o {$$ = $1;}
@@ -153,6 +153,7 @@ literal:
 
 %%
 void yyerror (char const *message) { fprintf (stderr, "%s[%d]\n", message,yylineno);}
+/*
 int readExitCodeType(EXIT_CODE code, Type e1, Type e2){
   int exitCode = 0;
   char error[100];
@@ -198,7 +199,7 @@ int readExitCodeVariables(EXIT_CODE code, char * var, Type exprType ,Type varTyp
       exitCode = readExitCodeType(code, exprType, varType);
   }
   return code;
-}
+}*/
 
 int main(int argc, char ** argv) {
   int ret;

@@ -6,9 +6,7 @@ typedef enum {
     SUCCESS,
     /*RELACIONADOS CON LOS TIPOS */
     TYPE_ERROR, // Error de tipo genérico
-    TYPE_NOT_EXISTS, //El tipo especificado no existe
     TYPE_DOESNT_AGREE, // Los tipos no coinciden
-    CONDITION_NOT_BOOL,
 
     OUT_OF_BOUNDS_ERROR,
     /* RELACIONADOS CON LAS VARIABLES */
