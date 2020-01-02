@@ -3,11 +3,13 @@
 #include "statement.h"
 
 typedef enum {
-	PLUS, MINUS, BY, DIVIDE, OR, AND, XOR, SI, SII, LESS, LESS_EQ, MORE, MORE_EQ, NOT_EQ, DOBLE_EQUALS
+	BIN_PLUS, BIN_MINUS, BIN_BY, BIN_DIVIDE, BIN_OR, BIN_AND, BIN_XOR, 
+	BIN_SI, BIN_SII, BIN_LESS, BIN_LESS_EQ, BIN_MORE, BIN_MORE_EQ, 
+	BIN_NOT_EQ, BIN_DOBLE_EQUALS
 } BinExpressionKind;
 
 typedef enum {
-	MINUS
+	UN_MINUS
 } UnExpressionKind;
 
 typedef struct {
@@ -37,3 +39,4 @@ typedef enum {
 } ExpressionNarity;
 
 Expression evaluate(Table table, ExpressionStatement * e);
+ExpressionStatement * createExpression(char * name, Type type);
