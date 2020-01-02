@@ -16,17 +16,17 @@ typedef struct {
 
 typedef struct {
 	char * name;
-	Expression *e;
+	ExpressionStatement *e;
 } Asig;
 
 typedef struct {
 	char *name;
 	Type type;
-	Expression *e;
+	ExpressionStatement *e;
 } Decl_Asig;
 
 typedef struct {
-	Expression * e;
+	ExpressionStatement * e;
 } Print;
 
 typedef struct {

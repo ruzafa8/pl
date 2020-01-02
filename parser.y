@@ -94,7 +94,7 @@ varDecl:
     $$ = createDecl($1,$3);
 }
   | IDENTIFIER ASSIGEQUALS expression {
-    $$ = createDeclAsig($1,getType($3),$3);
+    $$ = createDeclAsig($1,UNKNOWN,$3);
   }
   | IDENTIFIER ASSIGNTOK {
     $$ = createDecl($1, UNKNOWN);

@@ -76,6 +76,7 @@ void exec(Table table, Statement * s){
         case DOUBLE: code = addDefaultDouble(table, s->st._decl.name); break;
         case   BOOL: code = addDefaultBool(table, s->st._decl.name);   break;
         case   CHAR: code = addDefaultChar(table, s->st._decl.name);   break;
+        case UNKNOWN: code = add(table,s->st._decl.name);
         default    : code = TYPE_NOT_EXISTS;
       } break;
     case ASIG:
@@ -89,6 +90,7 @@ void exec(Table table, Statement * s){
       } break;
     case DECL_ASIG:
       e = evaluate(table,s->st._decl_asig.e);
+      if(s->st._decl_asig.type == getType(e) || s->st._decl_asig.type == UNKNOWN)
       switch(getType(e)){
         case    INT: code = addInt(table, s->st._decl_asig.name, e->value._int);       break;
         case DOUBLE: code = addDouble(table, s->st._decl_asig.name, e->value._double); break;
@@ -97,7 +99,7 @@ void exec(Table table, Statement * s){
         default    : code = TYPE_NOT_EXISTS;
       } break;
     case PRINT:
-      printExpression(table,evaluate(s->st._print.e));
+      printExpression(evaluate(table,s->st._print.e));
       break;
     case WHILE:
       e = evaluate(table,s->st._while.condition);
@@ -123,7 +125,7 @@ void exec(Table table, Statement * s){
       }
       break;
     case IF:
-      e = evaluate(s->st._if.cond);
+      e = evaluate(table,s->st._if.cond);
       if(getType(e) == BOOL){
         if(e->value._bool == TRUE){
           exec(table,s->st._if.body);
@@ -131,7 +133,7 @@ void exec(Table table, Statement * s){
       }
       break;
     case IF_ELSE:
-      e = evaluate(s->st._if_else.cond);
+      e = evaluate(table,s->st._if_else.cond);
       if(getType(e) == BOOL){
         if(e->value._bool == TRUE){
           exec(table,s->st._if_else.if_statement);
