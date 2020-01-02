@@ -250,11 +250,11 @@ Expression * _eval_double_eq(Expression * rhs, Expression * lhs) {
     }
 }
 
-Expression * binary_evaluate(Table table, BinExpressionStatement * e){
-    Expression * rhs = evaluate(table, e->rhs);
-    Expression * lhs = evaluate(table, e->lhs);
+Expression * binary_evaluate(Table table, BinExpressionStatement e){
+    Expression * rhs = evaluate(table, e.rhs);
+    Expression * lhs = evaluate(table, e.lhs);
 
-    switch(e->kind){
+    switch(e.kind){
         case(BIN_PLUS): return _eval_plus(rhs, lhs);
         case(BIN_MINUS): return _eval_minus(rhs, lhs);
         case(BIN_BY): return _eval_mult(rhs, lhs);
@@ -285,15 +285,15 @@ Expression * _un_eval_minus(Expression * e) {
     }
 }
 
-Expression unary_evaluate(Table table, UnExpressionStatement * e) {
-    Expression * expr = evaluate(table, e->rhs);
+Expression * unary_evaluate(Table table, UnExpressionStatement e) {
+    Expression * expr = evaluate(table, e.e);
 
-    switch(e->kind){
+    switch(e.kind){
         case(UN_MINUS): return _un_eval_minus(expr);
     }
 }
 
-Expression evaluate(Table table, ExpressionStatement * e){
+Expression * evaluate(Table table, ExpressionStatement * e){
     switch(e->_n){
         case UNARY:
             return unary_evaluate(table, e->_e._unary);

@@ -38,8 +38,8 @@
 
 %code requires {
   #include "hash_table.h"
-  #include "statement.h"
   #include "ExpressionStatement.h"
+  #include "statement.h"
 }
 
 %locations

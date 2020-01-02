@@ -48,7 +48,7 @@ typedef struct _exprstatement{
 	ExpressionNarity _n;
 } ExpressionStatement;
 
-Expression evaluate(Table table, ExpressionStatement * e);
+Expression * evaluate(Table table, ExpressionStatement * e);
 ExpressionStatement * createBinExpression(BinExpressionKind k, ExpressionStatement * lhs, ExpressionStatement * rhs);
 ExpressionStatement * createUnExpression(UnExpressionKind k, ExpressionStatement * e);
 ExpressionStatement * createLiteralExpression(Expression * e);
