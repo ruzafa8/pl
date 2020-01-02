@@ -4,12 +4,12 @@
 #include "hash_table.h"
 
 typedef enum {
-	DECL, ASIG, PRINT, WHILE, REPEAT, IF, IF_ELSE, COMPOSE
+	DECL, ASIG, DECL_ASIG, PRINT, WHILE, REPEAT, IF, IF_ELSE, COMPOSE
 } StatementType;
 
 typedef struct {
 	char * name;
-	Type t;
+	Type type;
 } Decl;
 
 typedef struct {
@@ -18,11 +18,17 @@ typedef struct {
 } Asig;
 
 typedef struct {
+	char *name;
+	Type type;
+	Expression *e;
+} Decl_Asig;
+
+typedef struct {
 	Expression * e;
 } Print;
 
 typedef struct {
-	Expression * e 
+	Expression * e
 } While;
 
 typedef struct {
@@ -30,7 +36,7 @@ typedef struct {
 
 typedef struct {
 	Expression * cond;
-	Statement * 
+	Statement *
 } If;
 
 typedef struct {
@@ -47,6 +53,7 @@ typedef struct {
 typedef union {
 	Decl _decl;
 	Asig _asig;
+	Decl_Asig _decl_asig;
 	Print _print;
 	While _while;
 	Repeat _repeat;
@@ -58,11 +65,12 @@ typedef union {
 typedef struct {
 	Statements st;
 	StatementType type;
-}
+} Statement;
 
-Statement * createDecl();
-Statement * createAsig();
-Statement * createPrint();
+Statement * createDecl(char * name, Type type);
+Statement * createAsig(char * name, Expression * e);
+Statement * createDeclAsig(char *name, Type t, Expression * e);
+Statement * createPrint(Expression * e);
 Statement * createWhile();
 Statement * createIf();
 Statement * createIfElse();
