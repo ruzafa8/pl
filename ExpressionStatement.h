@@ -12,31 +12,44 @@ typedef enum {
 	UN_MINUS
 } UnExpressionKind;
 
-typedef struct {
+typedef enum {
+	UNARY, BINARY, LITERAL
+} ExpressionNarity;
+
+//Resolve circular definition
+typedef struct _binexprstatement BinExpressionStatement;
+typedef struct _unexprstatement UnExpressionStatement;
+typedef union _naryexprstatement NaryExpressionStatement;
+typedef struct _exprstatement ExpressionStatement;
+
+typedef struct _binexprstatement{
 	BinExpressionKind kind;
-	ExpressionStatement lhs;
-	ExpressionStatement rhs;
+	ExpressionStatement * lhs;
+	ExpressionStatement * rhs;
 } BinExpressionStatement;
 
-typedef struct {
+typedef struct _unexprstatement{
 	UnExpressionKind kind;
-	ExpressionStatement e;
+	ExpressionStatement * e;
 } UnExpressionStatement;
 
+typedef struct _litexprstatement{
+	Expression * e;
+} LitExpressionStatement;
 
-typedef union {
+typedef union _naryexprstatement{
+	LitExpressionStatement _lit;
 	BinExpressionStatement _binary;
 	UnExpressionStatement _unary;
 } NaryExpressionStatement;
 
-typedef struct {
+typedef struct _exprstatement{
 	NaryExpressionStatement _e;
 	ExpressionNarity _n;
 } ExpressionStatement;
 
-typedef enum {
-	UNARY, BINARY
-} ExpressionNarity;
-
 Expression evaluate(Table table, ExpressionStatement * e);
-ExpressionStatement * createExpression(char * name, Type type);
+ExpressionStatement * createBinExpression(BinExpressionKind k, ExpressionStatement * lhs, ExpressionStatement * rhs);
+ExpressionStatement * createUnExpression(UnExpressionKind k, ExpressionStatement * e);
+ExpressionStatement * createLiteralExpression(Expression * e);
+

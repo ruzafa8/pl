@@ -80,27 +80,27 @@ IDENTITYRULE [[:alpha:]][[:alnum:]]*
 
 
 \'[:alnum:]\' { // -------- RECONOCIMIENTO DE TIPOS BASICOS --------
-  yylval.expr = createChar(yytext[1]);
+  yylval.expr = createLiteralExpression(createChar(yytext[1]));
   DEBUG_PRINT_LEX("%c",yytext[1]);
   return CARACTER;
 }
 "Verdadero" {
-  yylval.expr = createBool(TRUE);
+  yylval.expr = createLiteralExpression(createBool(TRUE));
   DEBUG_PRINT_LEX("%s","Verdadero");
   return PROPOSICION;
 }
 "Falso" {
-  yylval.expr = createBool(FALSE);
+  yylval.expr = createLiteralExpression(createBool(FALSE));
   DEBUG_PRINT_LEX("%s","Falso");
   return PROPOSICION;
 }
 {NUMS}\.{NUMS} {
-  yylval.expr = createDouble(atof(yytext));
+  yylval.expr = createLiteralExpression(createDouble(atof(yytext)));
   DEBUG_PRINT_LEX("%s",yytext);
   return DOBLE;
 }
 {NUMS} {
-  yylval.expr = createInt(atoi(yytext));
+  yylval.expr = createLiteralExpression(createInt(atoi(yytext)));
   DEBUG_PRINT_LEX("%s",yytext);
   return ENTERO;
 }

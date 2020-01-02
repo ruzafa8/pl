@@ -299,9 +299,37 @@ Expression evaluate(Table table, ExpressionStatement * e){
             return unary_evaluate(table, e->_unary);
         case BINARY:
             return binary_evaluate(table, e->_binary);
+        case LITERAL:
+            return e->_lit.e;
         default:
             printf("Expresion n-arity evaluation error\n");
             exit(-1);
     }
 }
 
+ExpressionStatement * createBinExpression(BinExpressionKind k, ExpressionStatement * lhs, ExpressionStatement * rhs){
+    ExpressionStatement * st = (ExpressionStatement *) malloc(sizeof(ExpressionStatement));
+    st->_n = BINARY;
+    st->_e._binary.kind = k;
+    st->_e._binary.lhs = lhs;
+    st->_e._binary.rhs = rhs;
+
+    return st;
+}
+
+ExpressionStatement * createUnExpression(UnExpressionKind k, ExpressionStatement * e){
+    ExpressionStatement * st = (ExpressionStatement *) malloc(sizeof(ExpressionStatement));
+    st->_n = UNARY;
+    st->_e._binary.kind = k;
+    st->_e._binary.e = e;
+
+    return st;
+}
+
+ExpressionStatement * createLiteralExpression(Expression * e) {
+    ExpressionStatement * st = (ExpressionStatement *) malloc(sizeof(ExpressionStatement));
+    st->_n = LITERAL;
+    st->_e._lit.e = e;
+    
+    return st;
+}
