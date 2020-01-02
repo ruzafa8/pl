@@ -3,8 +3,8 @@
 #include "expression.h"
 #include "hash_table.h"
 typedef enum {
-	BIN_PLUS, BIN_MINUS, BIN_BY, BIN_DIVIDE, BIN_OR, BIN_AND, BIN_XOR, 
-	BIN_SI, BIN_SII, BIN_LESS, BIN_LESS_EQ, BIN_MORE, BIN_MORE_EQ, 
+	BIN_PLUS, BIN_MINUS, BIN_BY, BIN_DIVIDE, BIN_OR, BIN_AND, BIN_XOR,
+	BIN_SI, BIN_SII, BIN_LESS, BIN_LESS_EQ, BIN_MORE, BIN_MORE_EQ,
 	BIN_NOT_EQ, BIN_DOBLE_EQUALS
 } BinExpressionKind;
 
@@ -13,7 +13,7 @@ typedef enum {
 } UnExpressionKind;
 
 typedef enum {
-	UNARY, BINARY, LITERAL
+	UNARY, BINARY, LITERAL, VARIABLE
 } ExpressionNarity;
 
 //Resolve circular definition
@@ -37,7 +37,12 @@ typedef struct _litexprstatement{
 	Expression * e;
 } LitExpressionStatement;
 
+typedef struct {
+	char * name;
+} VarExpressionStatement;
+
 typedef union _naryexprstatement{
+	VarExpressionStatement _var;
 	LitExpressionStatement _lit;
 	BinExpressionStatement _binary;
 	UnExpressionStatement _unary;
@@ -52,4 +57,4 @@ Expression * evaluate(Table table, ExpressionStatement * e);
 ExpressionStatement * createBinExpression(BinExpressionKind k, ExpressionStatement * lhs, ExpressionStatement * rhs);
 ExpressionStatement * createUnExpression(UnExpressionKind k, ExpressionStatement * e);
 ExpressionStatement * createLiteralExpression(Expression * e);
-
+ExpressionStatement * createVariableExpression(char * name);

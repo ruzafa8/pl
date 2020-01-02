@@ -64,8 +64,8 @@
 %% /* grammar */
 
 S:
-  /* %empty */            {DEBUG_PRINT_PAR("Empty\n");}
-  | sentences {exec(table,$1);};
+  /* %empty */ {DEBUG_PRINT_PAR("Empty\n");}
+  | sentences  {exec(table,$1);};
 ;
 
 sentences:
@@ -74,140 +74,77 @@ sentences:
 
 sentence:
   varDecl
-  | varAssign {$$ = $1;}
-  | conditional
-  | IMPRIMIR expression {
-      DEBUG_PRINT_PAR("Imprimir:\n");
-      $$ = createPrint($2);
-    }
-  | while_sentence  {$$ = $1;}
+  | varAssign | conditional | while_sentence {$$ = $1;}
+  | IMPRIMIR expression {DEBUG_PRINT_PAR("Imprimir:\n");$$ = createPrint($2);}
   //| repeat
 
-while_sentence: MIENTRAS expression HAZ sentences PUNTO {
-  $$ = createWhile($2, $4);
-}
+while_sentence: MIENTRAS expression HAZ sentences PUNTO {$$ = createWhile($2, $4);}
+
 varDecl:
-  IDENTIFIER ASSIGNTOK TYPETOK EQUALS expression {
-    $$ = createDeclAsig($1,$3,$5);
-}
-  | IDENTIFIER ASSIGNTOK TYPETOK {
-    $$ = createDecl($1,$3);
-}
-  | IDENTIFIER ASSIGEQUALS expression {
-    $$ = createDeclAsig($1,UNKNOWN,$3);
-  }
-  | IDENTIFIER ASSIGNTOK {
-    $$ = createDecl($1, UNKNOWN);
-  }
+  IDENTIFIER ASSIGNTOK TYPETOK EQUALS expression {$$ = createDeclAsig($1,$3,$5);}
+  | IDENTIFIER ASSIGNTOK TYPETOK {$$ = createDecl($1,$3);}
+  | IDENTIFIER ASSIGEQUALS expression {$$ = createDeclAsig($1,UNKNOWN,$3);}
+  | IDENTIFIER ASSIGNTOK {$$ = createDecl($1, UNKNOWN);}
 ;
 
-varAssign:
-  IDENTIFIER EQUALS expression {
-    $$ = createAsig($1, $3);
-  }
+varAssign: IDENTIFIER EQUALS expression { $$ = createAsig($1, $3);}
 ;
 
 conditional:
   IFTOK expression THENTOK sentences {}
  | IFTOK expression THENTOK sentences ELSETOK sentences {}
 
-expression: expression ORTOK o {
-    $$ = createBinExpression(BIN_OR, $1, $3);
-}
+expression: expression ORTOK o {$$ = createBinExpression(BIN_OR, $1, $3);}
  | o {$$ = $1;}
  ;
-o: o ANDTOK p {
-    $$ = createBinExpression(BIN_AND, $1, $3);
-}
+o: o ANDTOK p {$$ = createBinExpression(BIN_AND, $1, $3);}
  | p {$$ = $1;}
  ;
-p: p XORTOK q {
-    $$ = createBinExpression(BIN_XOR, $1, $3);
-}
+p: p XORTOK q {$$ = createBinExpression(BIN_XOR, $1, $3);}
  | q {$$ = $1;}
  ;
-q: q SITOK r {
-    $$ = createBinExpression(BIN_SI, $1, $3);
-}
+q: q SITOK r {  $$ = createBinExpression(BIN_SI, $1, $3);}
  | r {$$ = $1;}
  ;
-r: r SIITOK s {
-    $$ = createBinExpression(BIN_SII, $1, $3);
-}
+r: r SIITOK s {$$ = createBinExpression(BIN_SII, $1, $3);}
  | s {$$ = $1;}
  ;
-s: s LESSTOK t {
-    $$ = createBinExpression(BIN_LESS, $1, $3);
-}
+s: s LESSTOK t {$$ = createBinExpression(BIN_LESS, $1, $3);}
  | t {$$ = $1;}
  ;
-t: t LESS_EQTOK u {
-    $$ = createBinExpression(BIN_LESS_EQ, $1, $3);
-}
+t: t LESS_EQTOK u {$$ = createBinExpression(BIN_LESS_EQ, $1, $3);}
  | u {$$ = $1;}
  ;
-u: u MORETOK v {
-    $$ = createBinExpression(BIN_MORE, $1, $3);
-}
+u: u MORETOK v {$$ = createBinExpression(BIN_MORE, $1, $3);}
  | v {$$ = $1;}
  ;
-v: v MORE_EQTOK w {
-    $$ = createBinExpression(BIN_MORE_EQ, $1, $3);
-}
+v: v MORE_EQTOK w {$$ = createBinExpression(BIN_MORE_EQ, $1, $3);}
  | w {$$ = $1;}
  ;
-w: w NOT_EQTOK x {
-    $$ = createBinExpression(BIN_NOT_EQ, $1, $3);
-}
+w: w NOT_EQTOK x {$$ = createBinExpression(BIN_NOT_EQ, $1, $3);}
  | x {$$ = $1;}
  ;
-x: x DOBLE_EQUALSTOK y {
-    $$ = createBinExpression(BIN_DOBLE_EQUALS, $1, $3);
-}
+x: x DOBLE_EQUALSTOK y {$$ = createBinExpression(BIN_DOBLE_EQUALS, $1, $3);}
  | y {$$ = $1;}
  ;
-y: y PLUSTOK z {
-    $$ = createBinExpression(BIN_PLUS, $1, $3);
-}
-  | z {$$ = $1;}
-  ;
-z: z MINUSTOK f {
-    $$ = createBinExpression(BIN_MINUS, $1, $3);
-}
-  | f {$$ = $1;}
-  ;
-f: f BYTOK g {
-    $$ = createBinExpression(BIN_BY, $1, $3);
-}
+y: y PLUSTOK z {$$ = createBinExpression(BIN_PLUS, $1, $3);}
+ | z {$$ = $1;}
+ ;
+z: z MINUSTOK f {$$ = createBinExpression(BIN_MINUS, $1, $3);}
+ | f {$$ = $1;}
+ ;
+f: f BYTOK g {$$ = createBinExpression(BIN_BY, $1, $3);}
   | g {$$ = $1;}
   ;
-g: g DIVIDETOK h {
-    $$ = createBinExpression(BIN_DIVIDE, $1, $3);
-}
+g: g DIVIDETOK h {$$ = createBinExpression(BIN_DIVIDE, $1, $3);}
   | h {$$ = $1;}
   ;
-h: MINUSTOK i {
-    $$ = createUnExpression(UN_MINUS, $2);
-}
+h: MINUSTOK i {$$ = createUnExpression(UN_MINUS, $2);}
   | i {$$ = $1;}
   ;
 i: OPPARTH expression CLOSPARTH {$$ = $2;}
   | literal {$$ = $1;}
-  | IDENTIFIER {
-    Expression * e = NULL;
-
-    EXIT_CODE code = valueOf(table, $1, &e);
-    if(DEBUG_MODE){
-      printf("\nEXIT CODE DE VARIABLE %s = %d\n", $1, code);
-    }
-
-    if(e == NULL){
-      readExitCodeVariables(VAR_NOT_FOUND_ERROR,$1, INT, INT);
-      return -1;
-    } else readExitCodeVariables(SUCCESS,$1, getType(e), getType(e));
-
-    $$ = e;
-  }
+  | IDENTIFIER {$$ = createVariableExpression($1);}
   ;
 literal:
   ENTERO | DOBLE | CARACTER | PROPOSICION {$$ = $1;}

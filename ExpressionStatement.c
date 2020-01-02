@@ -301,6 +301,14 @@ Expression * evaluate(Table table, ExpressionStatement * e){
             return binary_evaluate(table, e->_e._binary);
         case LITERAL:
             return e->_e._lit.e;
+        case VARIABLE:
+          Expression * res = NULL;
+          valueOf(table,e->_e._var.name,&res);
+          if(e == NULL){
+            readExitCodeVariables(VAR_NOT_FOUND_ERROR,e->_e._var.name,UNKNOWN,UNKNOWN);
+            exit(-1);
+          }
+          return res;
         default:
             printf("Expresion n-arity evaluation error\n");
             exit(-1);
@@ -330,6 +338,14 @@ ExpressionStatement * createLiteralExpression(Expression * e) {
     ExpressionStatement * st = (ExpressionStatement *) malloc(sizeof(ExpressionStatement));
     st->_n = LITERAL;
     st->_e._lit.e = e;
-    
+
     return st;
+}
+
+Expression * createVariableExpression(char * name){
+  ExpressionStatement * st = (ExpressionStatement *) malloc(sizeof(ExpressionStatement));
+  st->_n = VARIABLE;
+  st->_e._var.name = name;
+
+  return st;
 }
