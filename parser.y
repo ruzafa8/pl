@@ -53,8 +53,8 @@
 %token ASSIGEQUALS
 %token <valString> STRING
 
-%token PLUS MINUS BY DIVIDE OPPARTH CLOSPARTH
-%token OR AND XOR SI SII LESS LESS_EQ MORE MORE_EQ NOT_EQ DOBLE_EQUALS
+%token PLUSTOK MINUSTOK BYTOK DIVIDETOK OPPARTH CLOSPARTH
+%token ORTOK ANDTOK XORTOK SITOK SIITOK LESSTOK LESS_EQTOK MORETOK MORE_EQTOK NOT_EQTOK DOBLE_EQUALSTOK
 %token <expr> ENTERO DOBLE CARACTER PROPOSICION
 %token HAZ MIENTRAS PUNTO
 
@@ -111,82 +111,82 @@ conditional:
   IFTOK expression THENTOK sentences {}
  | IFTOK expression THENTOK sentences ELSETOK sentences {}
 
-expression: expression OR o {
+expression: expression ORTOK o {
     $$ = createBinExpression(BIN_OR, $1, $3);
 }
  | o {$$ = $1;}
  ;
-o: o AND p {
+o: o ANDTOK p {
     $$ = createBinExpression(BIN_AND, $1, $3);
 }
  | p {$$ = $1;}
  ;
-p: p XOR q {
+p: p XORTOK q {
     $$ = createBinExpression(BIN_XOR, $1, $3);
 }
  | q {$$ = $1;}
  ;
-q: q SI r {
+q: q SITOK r {
     $$ = createBinExpression(BIN_SI, $1, $3);
 }
  | r {$$ = $1;}
  ;
-r: r SII s {
+r: r SIITOK s {
     $$ = createBinExpression(BIN_SII, $1, $3);
 }
  | s {$$ = $1;}
  ;
-s: s LESS t {
+s: s LESSTOK t {
     $$ = createBinExpression(BIN_LESS, $1, $3);
 }
  | t {$$ = $1;}
  ;
-t: t LESS_EQ u {
+t: t LESS_EQTOK u {
     $$ = createBinExpression(BIN_LESS_EQ, $1, $3);
 }
  | u {$$ = $1;}
  ;
-u: u MORE v {
+u: u MORETOK v {
     $$ = createBinExpression(BIN_MORE, $1, $3);
 }
  | v {$$ = $1;}
  ;
-v: v MORE_EQ w {
+v: v MORE_EQTOK w {
     $$ = createBinExpression(BIN_MORE_EQ, $1, $3);
 }
  | w {$$ = $1;}
  ;
-w: w NOT_EQ x {
+w: w NOT_EQTOK x {
     $$ = createBinExpression(BIN_NOT_EQ, $1, $3);
 }
  | x {$$ = $1;}
  ;
-x: x DOBLE_EQUALS y {
+x: x DOBLE_EQUALSTOK y {
     $$ = createBinExpression(BIN_DOBLE_EQUALS, $1, $3);
 }
  | y {$$ = $1;}
  ;
-y: y PLUS z {
+y: y PLUSTOK z {
     $$ = createBinExpression(BIN_PLUS, $1, $3);
 }
   | z {$$ = $1;}
   ;
-z: z MINUS f {
+z: z MINUSTOK f {
     $$ = createBinExpression(BIN_MINUS, $1, $3);
 }
   | f {$$ = $1;}
   ;
-f: f BY g {
+f: f BYTOK g {
     $$ = createBinExpression(BIN_BY, $1, $3);
 }
   | g {$$ = $1;}
   ;
-g: g DIVIDE h {
+g: g DIVIDETOK h {
     $$ = createBinExpression(BIN_DIVIDE, $1, $3);
 }
   | h {$$ = $1;}
   ;
-h: MINUS i {
+h: MINUSTOK i {
     $$ = createUnExpression(UN_MINUS, $2);
 }
   | i {$$ = $1;}

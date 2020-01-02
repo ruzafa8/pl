@@ -56,22 +56,22 @@ IDENTITYRULE [[:alpha:]][[:alnum:]]*
 
 "("              {DEBUG_PRINT_LEX("%s","("); return OPPARTH; /* RECONOCIMIENTO DE OPERADORES BASICOS*/}
 ")"              {DEBUG_PRINT_LEX("%s",")"); return CLOSPARTH;}
-"+"              {DEBUG_PRINT_LEX("%s","+"); return PLUS;}
-"-"              {DEBUG_PRINT_LEX("%s","-"); return MINUS;}
-"*"              {DEBUG_PRINT_LEX("%s","*"); return BY;}
-"/"              {DEBUG_PRINT_LEX("%s","/"); return DIVIDE;}
+"+"              {DEBUG_PRINT_LEX("%s","+"); return PLUSTOK;}
+"-"              {DEBUG_PRINT_LEX("%s","-"); return MINUSTOK;}
+"*"              {DEBUG_PRINT_LEX("%s","*"); return BYTOK;}
+"/"              {DEBUG_PRINT_LEX("%s","/"); return DIVIDETOK;}
 
-"o" {return OR; /* OPERADORES BINARIOS*/}
-"y" {return AND;}
-"eo" {return XOR;}
-"si" {return SI;}
-"sii" {return SII;}
-"<" {return LESS;}
-"<=" {return LESS_EQ;}
-">" {return MORE;}
-">=" {return MORE_EQ;}
-"/=" {return NOT_EQ;}
-"==" {return DOBLE_EQUALS;}
+"o" {return ORTOK; /* OPERADORES BINARIOS*/}
+"y" {return ANDTOK;}
+"eo" {return XORTOK;}
+"si" {return SITOK;}
+"sii" {return SIITOK;}
+"<" {return LESSTOK;}
+"<=" {return LESS_EQTOK;}
+">" {return MORETOK;}
+">=" {return MORE_EQTOK;}
+"/=" {return NOT_EQTOK;}
+"==" {return DOBLE_EQUALSTOK;}
 
 "mientras" {return MIENTRAS;}
 "haz" {return HAZ;}

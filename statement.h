@@ -2,6 +2,7 @@
 #define STATEMENT_H_INCLUDED
 
 #include "hash_table.h"
+#include "ExpressionStatement.h"
 
 typedef enum  {
 	DECL, ASIG, DECL_ASIG, PRINT, WHILE, REPEAT, IF, IF_ELSE, COMPOSE
@@ -29,20 +30,22 @@ typedef struct {
 } Print;
 
 typedef struct {
-	Expression * condition;
+	ExpressionStatement * condition;
 	struct _Statement * body;
 } While;
 
 typedef struct {
+	ExpressionStatement * numIteracions;
+	struct _Statement * body;
 } Repeat;
 
 typedef struct {
-	Expression * cond;
+	ExpressionStatement * cond;
 	struct _Statement * body;
 } If;
 
 typedef struct {
-	Expression * cond;
+	ExpressionStatement * cond;
 	struct _Statement * if_statement;
 	struct _Statement * else_statement;
 } If_else;
@@ -70,12 +73,13 @@ typedef struct _Statement {
 } Statement;
 
 Statement * createDecl(char * name, Type type);
-Statement * createAsig(char * name, Expression * e);
-Statement * createDeclAsig(char *name, Type t, Expression * e);
-Statement * createPrint(Expression * e);
-Statement * createWhile(Expression * condition, Statement * body);
-Statement * createIf();
-Statement * createIfElse();
+Statement * createAsig(char * name, ExpressionStatement * e);
+Statement * createDeclAsig(char *name, Type t, ExpressionStatement * e);
+Statement * createPrint(ExpressionStatement * e);
+Statement * createWhile(ExpressionStatement * condition, Statement * body);
+Statement * createRepeat(ExpressionStatement * numIteracions, Statement * body);
+Statement * createIf(ExpressionStatement * condition, Statement * body);
+Statement * createIfElse(ExpressionStatement * condition, Statement * then_st, Statement * else_st);
 
 Statement * join(Statement * s1, Statement * s2);
 
