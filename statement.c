@@ -10,7 +10,7 @@ Statement * createDecl(char * name, Type type, int line){
 }
 Statement * createAsig(char * name, ExpressionStatement * e, int line){
   Statement * st = (Statement *) malloc(sizeof(Statement));
-  st->type = DECL;
+  st->type = ASIG;
   st->st._asig.name = strdup(name);
   st->st._asig.e = e;
   st->line = line;
