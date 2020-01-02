@@ -52,8 +52,8 @@
 %token ASSIGEQUALS
 %token <valString> STRING
 
-%token PLUS MINUS BY DIVIDE OPPARTH CLOSPARTH
-%token OR AND XOR SI SII LESS LESS_EQ MORE MORE_EQ NOT_EQ DOBLE_EQUALS
+%token PLUSTOK MINUSTOK BYTOK DIVIDETOK OPPARTH CLOSPARTH
+%token ORTOK ANDTOK XORTOK SITOK SIITOK LESSTOK LESS_EQTOK MORETOK MORE_EQTOK NOT_EQTOK DOBLE_EQUALSTOK
 %token <expr> ENTERO DOBLE CARACTER PROPOSICION
 %token HAZ MIENTRAS PUNTO
 
@@ -110,7 +110,7 @@ conditional:
   IFTOK expression THENTOK sentences {}
  | IFTOK expression THENTOK sentences ELSETOK sentences {}
 
-expression: expression OR o {
+expression: expression ORTOK o {
   Type e = getType($1), o = getType($3);
   if(e == BOOL && o == BOOL){
     $$ = createBool(or($1->value._bool,$3->value._bool));
@@ -121,7 +121,7 @@ expression: expression OR o {
 }
  | o {$$ = $1;}
  ;
-o: o AND p {
+o: o ANDTOK p {
   Type o = getType($1), p = getType($3);
   if(o == BOOL && p == BOOL){
     $$ = createBool(and($1->value._bool,$3->value._bool));
@@ -132,7 +132,7 @@ o: o AND p {
 }
  | p {$$ = $1;}
  ;
-p: p XOR q {
+p: p XORTOK q {
   Type p = getType($1), q = getType($3);
   if(p == BOOL && q == BOOL){
     $$ = createBool(xor($1->value._bool,$3->value._bool));
@@ -143,7 +143,7 @@ p: p XOR q {
 }
  | q {$$ = $1;}
  ;
-q: q SI r {
+q: q SITOK r {
   Type q = getType($1), r = getType($3);
   if(q == BOOL && r == BOOL){
     $$ = createBool(si($1->value._bool,$3->value._bool));
@@ -154,7 +154,7 @@ q: q SI r {
 }
  | r {$$ = $1;}
  ;
-r: r SII s {
+r: r SIITOK s {
   Type r = getType($1), s = getType($3);
   if(r == BOOL && s == BOOL){
     $$ = createBool(sii($1->value._bool,$3->value._bool));
@@ -165,7 +165,7 @@ r: r SII s {
 }
  | s {$$ = $1;}
  ;
-s: s LESS t {
+s: s LESSTOK t {
   Type s = getType($1), t = getType($3);
   if(s == INT && t == INT){
     $$ = createBool($1->value._int < $3->value._int ? TRUE : FALSE);
@@ -184,7 +184,7 @@ s: s LESS t {
 }
  | t {$$ = $1;}
  ;
-t: t LESS_EQ u {
+t: t LESS_EQTOK u {
   Type s = getType($1), t = getType($3);
   if(s == INT && t == INT){
     $$ = createBool($1->value._int <= $3->value._int ? TRUE : FALSE);
@@ -203,7 +203,7 @@ t: t LESS_EQ u {
 }
  | u {$$ = $1;}
  ;
-u: u MORE v {
+u: u MORETOK v {
   Type s = getType($1), t = getType($3);
   if(s == INT && t == INT){
     $$ = createBool($1->value._int > $3->value._int ? TRUE : FALSE);
@@ -222,7 +222,7 @@ u: u MORE v {
 }
  | v {$$ = $1;}
  ;
-v: v MORE_EQ w {
+v: v MORE_EQTOK w {
   Type s = getType($1), t = getType($3);
   if(s == INT && t == INT){
     $$ = createBool($1->value._int >= $3->value._int ? TRUE : FALSE);
@@ -241,7 +241,7 @@ v: v MORE_EQ w {
 }
  | w {$$ = $1;}
  ;
-w: w NOT_EQ x {
+w: w NOT_EQTOK x {
   Type s = getType($1), t = getType($3);
   if(s == INT && t == INT){
     $$ = createBool($1->value._int != $3->value._int ? TRUE : FALSE);
@@ -260,7 +260,7 @@ w: w NOT_EQ x {
 }
  | x {$$ = $1;}
  ;
-x: x DOBLE_EQUALS y {
+x: x DOBLE_EQUALSTOK y {
   Type s = getType($1), t = getType($3);
   if(s == INT && t == INT){
     $$ = createBool($1->value._int == $3->value._int ? TRUE : FALSE);
@@ -279,7 +279,7 @@ x: x DOBLE_EQUALS y {
 }
  | y {$$ = $1;}
  ;
-y: y PLUS z {
+y: y PLUSTOK z {
   Type e = getType($1), t = getType($3);
   if (e == INT && t == INT) {
     $$ = createInt($1->value._int + $3->value._int);
@@ -296,7 +296,7 @@ y: y PLUS z {
 }
   | z {$$ = $1;}
   ;
-z: z MINUS f {
+z: z MINUSTOK f {
   Type t = getType($1), f = getType($3);
   if (t == INT && f == INT) {
     $$ = createInt($1->value._int - $3->value._int);
@@ -313,7 +313,7 @@ z: z MINUS f {
 }
   | f {$$ = $1;}
   ;
-f: f BY g {
+f: f BYTOK g {
   Type f = getType($1), g = getType($3);
   if (f == INT && g == INT) {
     $$ = createInt($1->value._int * $3->value._int);
@@ -330,7 +330,7 @@ f: f BY g {
 }
   | g {$$ = $1;}
   ;
-g: g DIVIDE h {
+g: g DIVIDETOK h {
   Type g = getType($1), h = getType($3);
   if (g == INT && h == INT) {
     $$ = createInt($1->value._int / $3->value._int);
@@ -347,7 +347,7 @@ g: g DIVIDE h {
 }
   | h {$$ = $1;}
   ;
-h: MINUS i {
+h: MINUSTOK i {
   Type j = getType($2);
   if(j == INT){
     $$ = createInt(-$2->value._int);
