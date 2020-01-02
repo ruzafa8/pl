@@ -293,6 +293,16 @@ Expression * unary_evaluate(Table table, UnExpressionStatement e) {
     }
 }
 
+Expression * variable_evaluate(Table table, VarExpressionStatement v) {
+    Expression * res = NULL;
+    valueOf(table,v.name,&res);
+    if(res == NULL){
+        readExitCodeVariables(VAR_NOT_FOUND_ERROR,v.name,UNKNOWN,UNKNOWN);
+        exit(-1);
+    }
+    return res;
+}
+
 Expression * evaluate(Table table, ExpressionStatement * e){
     switch(e->_n){
         case UNARY:
@@ -302,13 +312,7 @@ Expression * evaluate(Table table, ExpressionStatement * e){
         case LITERAL:
             return e->_e._lit.e;
         case VARIABLE:
-          Expression * res = NULL;
-          valueOf(table,e->_e._var.name,&res);
-          if(e == NULL){
-            readExitCodeVariables(VAR_NOT_FOUND_ERROR,e->_e._var.name,UNKNOWN,UNKNOWN);
-            exit(-1);
-          }
-          return res;
+            return variable_evaluate(table, e->_e._var);
         default:
             printf("Expresion n-arity evaluation error\n");
             exit(-1);
@@ -342,7 +346,7 @@ ExpressionStatement * createLiteralExpression(Expression * e) {
     return st;
 }
 
-Expression * createVariableExpression(char * name){
+ExpressionStatement * createVariableExpression(char * name){
   ExpressionStatement * st = (ExpressionStatement *) malloc(sizeof(ExpressionStatement));
   st->_n = VARIABLE;
   st->_e._var.name = name;
