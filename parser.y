@@ -395,7 +395,7 @@ h: MINUS i {
   } else if (j == DOUBLE){
     $$ = createDouble(-$2->value._double);
   } else {
-    ("Error, de tipado. No es posible poner un %s negativo",strType[j]);
+    printf("Error, de tipado. No es posible poner un %s negativo",strType[j]);
     return -1;
   }
 }

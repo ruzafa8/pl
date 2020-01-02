@@ -25,6 +25,15 @@ typedef struct {
 typedef union {
 	BinExpressionStatement _binary;
 	UnExpressionStatement _unary;
+} NaryExpressionStatement;
+
+typedef struct {
+	NaryExpressionStatement _e;
+	ExpressionNarity _n;
 } ExpressionStatement;
 
-Expression exec_expression(Table table, Statement * s);
+typedef enum {
+	UNARY, BINARY
+} ExpressionNarity;
+
+Expression evaluate(Table table, ExpressionStatement * e);
