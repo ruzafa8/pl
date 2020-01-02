@@ -1,4 +1,36 @@
 #include "ExpressionStatement.h"
+int readExitCodeType(EXIT_CODE code, Type e1, Type e2){
+  int exitCode = 0;
+  switch(code){
+    case SUCCESS:;break;
+    case TYPE_ERROR:
+      printf("Error linea, operación no definida para los tipos %s y %s\n" ,strType[e1], strType[e2]);
+      exitCode = 1; break;
+    case TYPE_DOESNT_AGREE:
+      printf("Error linea, los tipos no coinciden: %s, %s\n" ,strType[e1], strType[e2]);
+      exitCode = 1; break;
+    default:
+      printf("ERROR DE LA MUERTE");
+      exitCode = 1;
+  }
+  return exitCode;
+}
+int readExitCodeVariables(EXIT_CODE code, char * var, Type exprType ,Type varType){
+  int exitCode = 0;
+  switch(code){
+    case SUCCESS:
+      break;
+    case VAR_ALREADY_EXISTS_ERROR:
+      printf("Error linea , la variable %s ya existe\n",var);
+      exitCode = 1; break;
+    case VAR_NOT_FOUND_ERROR:
+      printf("Error linea, la variable %s no existe",var);
+      exitCode = 1; break;
+    default:
+      exitCode = readExitCodeType(code, exprType, varType);
+  }
+  return code;
+}
 
 Expression * _eval_plus(Expression * rhs, Expression * lhs) {
     Type rhsType = getType(rhs);
@@ -293,17 +325,8 @@ Expression * unary_evaluate(Table table, UnExpressionStatement e) {
     }
 }
 
-Expression * variable_evaluate(Table table, VarExpressionStatement v) {
-    Expression * res = NULL;
-    valueOf(table,v.name,&res);
-    if(res == NULL){
-        readExitCodeVariables(VAR_NOT_FOUND_ERROR,v.name,UNKNOWN,UNKNOWN);
-        exit(-1);
-    }
-    return res;
-}
-
 Expression * evaluate(Table table, ExpressionStatement * e){
+    Expression * res = NULL;
     switch(e->_n){
         case UNARY:
             return unary_evaluate(table, e->_e._unary);
@@ -312,7 +335,13 @@ Expression * evaluate(Table table, ExpressionStatement * e){
         case LITERAL:
             return e->_e._lit.e;
         case VARIABLE:
-            return variable_evaluate(table, e->_e._var);
+
+          valueOf(table,e->_e._var.name,&res);
+          if(e == NULL){
+            readExitCodeVariables(VAR_NOT_FOUND_ERROR,e->_e._var.name,UNKNOWN,UNKNOWN);
+            exit(-1);
+          }
+          return res;
         default:
             printf("Expresion n-arity evaluation error\n");
             exit(-1);
@@ -349,7 +378,7 @@ ExpressionStatement * createLiteralExpression(Expression * e) {
 ExpressionStatement * createVariableExpression(char * name){
   ExpressionStatement * st = (ExpressionStatement *) malloc(sizeof(ExpressionStatement));
   st->_n = VARIABLE;
-  st->_e._var.name = name;
+  st->_e._var.name = strdup(name);
 
   return st;
 }
