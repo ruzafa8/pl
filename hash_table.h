@@ -70,4 +70,7 @@ EXIT_CODE changeArrayChar(const Table table, const char * var, char newValue, in
 EXIT_CODE changeArrayDouble(const Table table, const char * var, double newValue, int position);
 EXIT_CODE changeArrayBool(const Table table, const char * var, Bool newValue, int position);
 */
+
+/* Prints the value of all variables included in the hash table */
+void printTable(const Table table);
 #endif // HASH_TABLE_H_INCLUDED

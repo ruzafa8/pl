@@ -28,6 +28,16 @@ int valueOf(const Table table, const char * var, Expression** value){
 	return found ? SUCCESS : VAR_NOT_FOUND_ERROR;
 }
 
+void printTable(const Table table) {
+    for(int i=0; i<HASH_TABLE_SIZE; i++){
+	Variable * v = *(table +i);
+	while(v != NULL){
+	    printf("%s -> ",v->name);
+	    printExpression(v->expression);
+	    v = v->next;
+	}
+    }
+}
 
 EXIT_CODE add(Table table, const char * var){
     int h = hash(var);

@@ -395,6 +395,7 @@ int main(int argc, char ** argv) {
       table = createTable();
       ret = yyparse();
       fclose(yyin);
+      printTable(table);
       return ret;
   } else {
     printf("Usage: cosa filename\n");

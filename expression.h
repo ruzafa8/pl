@@ -17,7 +17,7 @@ typedef enum{
 	INT, CHAR, DOUBLE, BOOL, UNKNOWN
 } Type;
 
-static const char * strType[] = {"Entero","Caracter","Decimal", "Proposicion"};
+static const char * strType[] = {"Entero","Caracter","Decimal", "Proposicion", "Desconocido(?)"};
 
 typedef struct {
 	Type type;
