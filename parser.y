@@ -22,11 +22,18 @@
     Table table;
 %}
 
+
 %union{
+    char * valString;
+    Type type;
+    Statement * statement;
+    Expression * expr;
+}
+/*union{
   char * valString;
   Type type;
   Expression * expr;
-}
+}*/
 
 %code requires {
   #include "hash_table.h"
@@ -68,7 +75,9 @@ sentence:
   | conditional
   | IMPRIMIR expression {
       DEBUG_PRINT_PAR("Imprimir:\n");
-      printExpression($2);
+      Statement * s = createPrint();
+      s->_print->e = $2;
+      $$ = s;
     }
 
 varDecl:
