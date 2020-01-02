@@ -1,4 +1,3 @@
-
 #include "hash_table.h"
 
 Table createTable(){
@@ -16,7 +15,7 @@ int hash(const char * var){// ALgoritmo de Horner.
 
 int valueOf(const Table table, const char * var, Expression** value){
 
-    Variable * v = *(table + hash(var));
+  Variable * v = *(table + hash(var));
 	int found = 0;
 
 	while(v != NULL && !found){
@@ -165,7 +164,7 @@ EXIT_CODE changeInt(const Table table, const char * var, int newValue){
         v->expression = createInt(newValue);
         code = SUCCESS;
       } else {
-        code = TYPE_ERROR;
+        code = TYPE_DOESNT_AGREE;
       }
       found = 1;
 		}
@@ -184,7 +183,7 @@ EXIT_CODE changeChar(const Table table, const char * var, char newValue){
         v->expression = createChar(newValue);
         code = SUCCESS;
       } else {
-        code = TYPE_ERROR;
+        code = TYPE_DOESNT_AGREE;
       }
       found = 1;
 		}
@@ -203,7 +202,7 @@ EXIT_CODE changeDouble(const Table table, const char * var, double newValue){
         v->expression = createDouble(newValue);
         code = SUCCESS;
       } else {
-        code = TYPE_ERROR;
+        code = TYPE_DOESNT_AGREE;
       }
       found = 1;
 		}
@@ -222,7 +221,7 @@ EXIT_CODE changeBool(const Table table, const char * var, Bool newValue){
         v->expression = createBool(newValue);
         code = SUCCESS;
       } else {
-        code = TYPE_ERROR;
+        code = TYPE_DOESNT_AGREE;
       }
       found = 1;
 		}

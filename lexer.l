@@ -57,6 +57,19 @@ IDENTITYRULE [[:alpha:]][[:alnum:]]*
 "*"              {DEBUG_PRINT_LEX("%s","*"); return BY;}
 "/"              {DEBUG_PRINT_LEX("%s","/"); return DIVIDE;}
 
+"o" {return OR;}
+"y" {return AND;}
+"eo" {return XOR;}
+"si" {return SI;}
+"sii" {return SII;}
+"<" {return LESS;}
+"<=" {return LESS_EQ;}
+">" {return MORE;}
+">=" {return MORE_EQ;}
+"/=" {return NOT_EQ;}
+"==" {return DOBLE_EQUALS;}
+
+
 
 
 \'[:alnum:]\' { // -------- RECONOCIMIENTO DE TIPOS BASICOS --------

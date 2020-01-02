@@ -13,6 +13,7 @@ Expression * create(Type type){
 	}
 	return e;
 }
+
 Expression * createInt(int value){
 	Expression* e = (Expression *) malloc(sizeof(Expression));
         e->type = INT;
@@ -39,7 +40,7 @@ Expression * createBool(Bool value){
 }
 
 EXIT_CODE getInt(Expression * expression, int* value){
-	EXIT_CODE code = TYPE_ERROR;
+	EXIT_CODE code = TYPE_DOESNT_AGREE;
 	if(expression->type == INT){
 		*value = expression->value._int;
 		code = SUCCESS;
@@ -47,7 +48,7 @@ EXIT_CODE getInt(Expression * expression, int* value){
 	return code;
 }
 EXIT_CODE getDouble(Expression * expression, double *value){
-	EXIT_CODE code = TYPE_ERROR;
+	EXIT_CODE code = TYPE_DOESNT_AGREE;
 	if(expression->type == DOUBLE){
 		*value = expression->value._double;
 		code = SUCCESS;
@@ -55,7 +56,7 @@ EXIT_CODE getDouble(Expression * expression, double *value){
 	return code;
 }
 EXIT_CODE getChar(Expression * expression, char *value){
-	EXIT_CODE code = TYPE_ERROR;
+	EXIT_CODE code = TYPE_DOESNT_AGREE;
         if(expression->type == CHAR){
                 *value = expression->value._char;
                 code = SUCCESS;
@@ -64,7 +65,7 @@ EXIT_CODE getChar(Expression * expression, char *value){
 
 }
 EXIT_CODE getBool(Expression * expression, Bool *value){
-	EXIT_CODE code = TYPE_ERROR;
+	EXIT_CODE code = TYPE_DOESNT_AGREE;
         if(expression->type == BOOL){
                 *value = expression->value._bool;
                 code = SUCCESS;

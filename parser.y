@@ -6,11 +6,11 @@
     #ifdef PAR_DEBUG
     #define DEBUG_PRINT_PAR(x) printf(x)
     #define DEBUG_PRINT_EXPRESSION(x) printExpression(x)
-    #define DEBUG_MODE 0
+    #define DEBUG_MODE 1
     #else
     #define DEBUG_PRINT_PAR(x)
     #define DEBUG_PRINT_EXPRESSION(x)
-    #define DEBUG_MODE 1
+    #define DEBUG_MODE 0
     #endif
 
     int readExitCodeType(EXIT_CODE, Type, Type);
@@ -41,12 +41,11 @@
 %token ASSIGEQUALS
 %token <valString> STRING
 
-
-%left <valString> BINARYOP
 %token PLUS MINUS BY DIVIDE OPPARTH CLOSPARTH
+%token OR AND XOR SI SII LESS LESS_EQ MORE MORE_EQ NOT_EQ DOBLE_EQUALS
 %token <expr> ENTERO DOBLE CARACTER PROPOSICION
 
-%type <expr> expression literal t f g h i j
+%type <expr> expression literal o p q r s t u v w x y z f g h i
 
 %start S
 %% /* grammar */
@@ -135,8 +134,98 @@ varAssign:
     }
   }
 ;
-
-expression: expression PLUS t {
+expression: expression OR o {
+  Type e = getType($1), o = getType($3);
+  if(e == BOOL && o == BOOL){
+    $$ = createBool(or($1->value._bool,$3->value._bool));
+  } else {
+    readExitCodeType(TYPE_ERROR,e,o);
+    return -1;
+  }
+}
+ | o {$$ = $1;}
+ ;
+o: o AND p {
+  Type o = getType($1), p = getType($3);
+  if(o == BOOL && p == BOOL){
+    $$ = createBool(and($1->value._bool,$3->value._bool));
+  } else {
+    readExitCodeType(TYPE_ERROR,o,p);
+    return -1;
+  }
+}
+ | p {$$ = $1;}
+ ;
+p: p XOR q {
+  Type p = getType($1), q = getType($3);
+  if(p == BOOL && q == BOOL){
+    $$ = createBool(xor($1->value._bool,$3->value._bool));
+  } else {
+    readExitCodeType(TYPE_ERROR,p,q);
+    return -1;
+  }
+}
+ | q {$$ = $1;}
+ ;
+q: q SI r {
+  Type q = getType($1), r = getType($3);
+  if(q == BOOL && r == BOOL){
+    $$ = createBool(si($1->value._bool,$3->value._bool));
+  } else {
+    readExitCodeType(TYPE_ERROR,q,r);
+    return -1;
+  }
+}
+ | r {$$ = $1;}
+ ;
+r: r SII s {
+  Type r = getType($1), s = getType($3);
+  if(r == BOOL && s == BOOL){
+    $$ = createBool(sii($1->value._bool,$3->value._bool));
+  } else {
+    readExitCodeType(TYPE_ERROR,r,s);
+    return -1;
+  }
+}
+ | s {$$ = $1;}
+ ;
+s: s LESS t {
+  printf("NOT IMPLEMENTED YET");
+  return -1;
+}
+ | t {$$ = $1;}
+ ;
+t: t LESS_EQ u {
+  printf("NOT IMPLEMENTED YET");
+  return -1;
+}
+ | u {$$ = $1;}
+ ;
+u: u MORE v {
+  printf("NOT IMPLEMENTED YET");
+  return -1;
+}
+ | v {$$ = $1;}
+ ;
+v: v MORE_EQ w {
+  printf("NOT IMPLEMENTED YET");
+  return -1;
+}
+ | w {$$ = $1;}
+ ;
+w: w NOT_EQ x {
+  printf("NOT IMPLEMENTED YET");
+  return -1;
+}
+ | x {$$ = $1;}
+ ;
+x: x DOBLE_EQUALS y {
+  printf("NOT IMPLEMENTED YET");
+  return -1;
+}
+ | y {$$ = $1;}
+ ;
+y: y PLUS z {
   Type e = getType($1), t = getType($3);
   if (e == INT && t == INT) {
     $$ = createInt($1->value._int + $3->value._int);
@@ -146,18 +235,14 @@ expression: expression PLUS t {
     $$ = createDouble($1->value._int + $3->value._double);
   } else if (e == DOUBLE && t == INT) {
     $$ = createDouble($1->value._double + $3->value._int);
-  } else if(e == INT || e == DOUBLE || e == BOOL || e == CHAR &&
-            t == INT || t == DOUBLE || t == BOOL || t == CHAR){
-    readExitCodeType(TYPE_ERROR,e,t);
-    return -1;
   } else {
-    readExitCodeType(TYPE_DOESNT_AGREE, e,t);
+    readExitCodeType(TYPE_ERROR,e,t);
     return -1;
   }
 }
-  | t {$$ = $1;}
+  | z {$$ = $1;}
   ;
-t: t MINUS f {
+z: z MINUS f {
   Type t = getType($1), f = getType($3);
   if (t == INT && f == INT) {
     $$ = createInt($1->value._int - $3->value._int);
@@ -167,12 +252,8 @@ t: t MINUS f {
     $$ = createDouble($1->value._int - $3->value._double);
   } else if (t == DOUBLE && f == INT) {
     $$ = createDouble($1->value._double - $3->value._int);
-  } else if(f == INT || f == DOUBLE || f == BOOL || f == CHAR &&
-            t == INT || t == DOUBLE || t == BOOL || t == CHAR){
+  } else{
     readExitCodeType(TYPE_ERROR,f,t);
-    return -1;
-  } else {
-    readExitCodeType(TYPE_DOESNT_AGREE, f,t);
     return -1;
   }
 }
@@ -188,12 +269,8 @@ f: f BY g {
     $$ = createDouble($1->value._int * $3->value._double);
   } else if (f == DOUBLE && g == INT) {
     $$ = createDouble($1->value._double * $3->value._int);
-  } else if(f == INT || f == DOUBLE || f == BOOL || f == CHAR &&
-            g == INT || g == DOUBLE || g == BOOL || g == CHAR){
-    readExitCodeType(TYPE_ERROR,f,g);
-    return -1;
   } else {
-    readExitCodeType(TYPE_DOESNT_AGREE, f,g);
+    readExitCodeType(TYPE_ERROR,f,g);
     return -1;
   }
 }
@@ -216,13 +293,7 @@ g: g DIVIDE h {
 }
   | h {$$ = $1;}
   ;
-h: h BINARYOP i {
-  yyerror("NOT IMPLEMENTED YET");
-  return -1;
-}
-  | i {$$ = $1;}
-  ;
-i: MINUS j {
+h: MINUS i {
   Type j = getType($2);
   if(j == INT){
     $$ = createInt(-$2->value._int);
@@ -233,16 +304,23 @@ i: MINUS j {
     return -1;
   }
 }
-  | j {$$ = $1;}
+  | i {$$ = $1;}
   ;
-j: OPPARTH expression CLOSPARTH {$$ = $2;}
+i: OPPARTH expression CLOSPARTH {$$ = $2;}
   | literal {$$ = $1;}
   | IDENTIFIER {
-    Expression * e;
+    Expression * e = NULL;
+
     EXIT_CODE code = valueOf(table, $1, &e);
-    if(readExitCodeVariables(code, $1,getType(e),getType(e)) == 1){
-      return -1;
+    if(DEBUG_MODE){
+      printf("\nEXIT CODE DE VARIABLE %s = %d\n", $1, code);
     }
+
+    if(e == NULL){
+      readExitCodeVariables(VAR_NOT_FOUND_ERROR,$1, INT, INT);
+      return -1;
+    } else readExitCodeVariables(SUCCESS,$1, getType(e), getType(e));
+
     $$ = e;
   }
   ;

@@ -4,10 +4,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include "error.h"
-
-typedef enum {
-	FALSE, TRUE
-}Bool;
+#include "bool.h"
 
 typedef union{
 	int _int;
