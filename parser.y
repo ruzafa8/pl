@@ -191,38 +191,116 @@ r: r SII s {
  | s {$$ = $1;}
  ;
 s: s LESS t {
-  printf("NOT IMPLEMENTED YET");
-  return -1;
+  Type s = getType($1), t = getType($3);
+  if(s == INT && t == INT){
+    $$ = createBool($1->value._int < $3->value._int ? TRUE : FALSE);
+  } else if (s == DOUBLE && t == DOUBLE){
+    $$ = createBool($1->value._double < $3->value._double ? TRUE : FALSE);
+  } else if(s == INT && t == DOUBLE) {
+    $$ = createBool($1->value._int < $3->value._double ? TRUE : FALSE);
+  } else if (s == DOUBLE && t == INT){
+    $$ = createBool($1->value._double < $3->value._int ? TRUE : FALSE);
+  } else if(s == CHAR && t == CHAR){
+    $$ = createBool($1->value._char < $3->value._char ? TRUE : FALSE);
+  } else {
+    readExitCodeType(TYPE_ERROR, s,t);
+    return -1;
+  }
 }
  | t {$$ = $1;}
  ;
 t: t LESS_EQ u {
-  printf("NOT IMPLEMENTED YET");
-  return -1;
+  Type s = getType($1), t = getType($3);
+  if(s == INT && t == INT){
+    $$ = createBool($1->value._int <= $3->value._int ? TRUE : FALSE);
+  } else if (s == DOUBLE && t == DOUBLE){
+    $$ = createBool($1->value._double <= $3->value._double ? TRUE : FALSE);
+  } else if(s == INT && t == DOUBLE) {
+    $$ = createBool($1->value._int <= $3->value._double ? TRUE : FALSE);
+  } else if (s == DOUBLE && t == INT){
+    $$ = createBool($1->value._double <= $3->value._int ? TRUE : FALSE);
+  } else if(s == CHAR && t == CHAR){
+    $$ = createBool($1->value._char <= $3->value._char ? TRUE : FALSE);
+  } else {
+    readExitCodeType(TYPE_ERROR, s,t);
+    return -1;
+  }
 }
  | u {$$ = $1;}
  ;
 u: u MORE v {
-  printf("NOT IMPLEMENTED YET");
-  return -1;
+  Type s = getType($1), t = getType($3);
+  if(s == INT && t == INT){
+    $$ = createBool($1->value._int > $3->value._int ? TRUE : FALSE);
+  } else if (s == DOUBLE && t == DOUBLE){
+    $$ = createBool($1->value._double > $3->value._double ? TRUE : FALSE);
+  } else if(s == INT && t == DOUBLE) {
+    $$ = createBool($1->value._int > $3->value._double ? TRUE : FALSE);
+  } else if (s == DOUBLE && t == INT){
+    $$ = createBool($1->value._double > $3->value._int ? TRUE : FALSE);
+  } else if(s == CHAR && t == CHAR){
+    $$ = createBool($1->value._char > $3->value._char ? TRUE : FALSE);
+  } else {
+    readExitCodeType(TYPE_ERROR, s,t);
+    return -1;
+  }
 }
  | v {$$ = $1;}
  ;
 v: v MORE_EQ w {
-  printf("NOT IMPLEMENTED YET");
-  return -1;
+  Type s = getType($1), t = getType($3);
+  if(s == INT && t == INT){
+    $$ = createBool($1->value._int >= $3->value._int ? TRUE : FALSE);
+  } else if (s == DOUBLE && t == DOUBLE){
+    $$ = createBool($1->value._double >= $3->value._double ? TRUE : FALSE);
+  } else if(s == INT && t == DOUBLE) {
+    $$ = createBool($1->value._int >= $3->value._double ? TRUE : FALSE);
+  } else if (s == DOUBLE && t == INT){
+    $$ = createBool($1->value._double >= $3->value._int ? TRUE : FALSE);
+  } else if(s == CHAR && t == CHAR){
+    $$ = createBool($1->value._char >= $3->value._char ? TRUE : FALSE);
+  } else {
+    readExitCodeType(TYPE_ERROR, s,t);
+    return -1;
+  }
 }
  | w {$$ = $1;}
  ;
 w: w NOT_EQ x {
-  printf("NOT IMPLEMENTED YET");
-  return -1;
+  Type s = getType($1), t = getType($3);
+  if(s == INT && t == INT){
+    $$ = createBool($1->value._int != $3->value._int ? TRUE : FALSE);
+  } else if (s == DOUBLE && t == DOUBLE){
+    $$ = createBool($1->value._double != $3->value._double ? TRUE : FALSE);
+  } else if(s == INT && t == DOUBLE) {
+    $$ = createBool($1->value._int != $3->value._double ? TRUE : FALSE);
+  } else if (s == DOUBLE && t == INT){
+    $$ = createBool($1->value._double != $3->value._int ? TRUE : FALSE);
+  } else if(s == CHAR && t == CHAR){
+    $$ = createBool($1->value._char != $3->value._char ? TRUE : FALSE);
+  } else {
+    readExitCodeType(TYPE_ERROR, s,t);
+    return -1;
+  }
 }
  | x {$$ = $1;}
  ;
 x: x DOBLE_EQUALS y {
-  printf("NOT IMPLEMENTED YET");
-  return -1;
+  Type s = getType($1), t = getType($3);
+  if(s == INT && t == INT){
+    $$ = createBool($1->value._int == $3->value._int ? TRUE : FALSE);
+  } else if (s == DOUBLE && t == DOUBLE){
+    $$ = createBool($1->value._double == $3->value._double ? TRUE : FALSE);
+  } else if(s == INT && t == DOUBLE) {
+    $$ = createBool($1->value._int == $3->value._double ? TRUE : FALSE);
+  } else if (s == DOUBLE && t == INT){
+    $$ = createBool($1->value._double == $3->value._int ? TRUE : FALSE);
+  } else if(s == CHAR && t == CHAR){
+    $$ = createBool($1->value._char == $3->value._char ? TRUE : FALSE);
+  } else {
+    readExitCodeType(TYPE_ERROR, s,t);
+    return -1;
+  }
 }
  | y {$$ = $1;}
  ;
