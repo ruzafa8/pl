@@ -14,7 +14,7 @@ Expression * _eval_plus(Expression * rhs, Expression * lhs) {
         return createDouble(rhs->value._double + lhs->value._int);
     } else {
         readExitCodeType(TYPE_ERROR,rhsType,lhsType);
-        //return -1; Failure?
+        exit(-1);
     }
 }
 
@@ -32,7 +32,7 @@ Expression * _eval_minus(Expression * rhs, Expression * lhs) {
         return createDouble(rhs->value._double - lhs->value._int);
     } else {
         readExitCodeType(TYPE_ERROR,rhsType,lhsType);
-        //return -1; Failure?
+        exit(-1);
     }
 }
 
@@ -49,7 +49,7 @@ Expression * _eval_mult(Expression * rhs, Expression * lhs) {
         return createDouble(rhs->value._double * lhs->value._int);
     } else {
         readExitCodeType(TYPE_ERROR,rhsType,lhsType);
-        //return -1;
+        exit(-1);
     }
 }
 
@@ -66,7 +66,7 @@ Expression * _eval_div(Expression * rhs, Expression * lhs) {
         return createDouble(rhs->value._double / lhs->value._int);
     } else {
         readExitCodeType(TYPE_ERROR,rhsType,lhsType);
-        //return -1;
+        exit(-1);
     }
 }
 
@@ -78,7 +78,7 @@ Expression * _eval_or(Expression * rhs, Expression * lhs) {
         return createBool(or(rhs->value._bool,lhs->value._bool));
     } else {
         readExitCodeType(TYPE_ERROR,rhsType,lhsType);
-        //return -1;
+        exit(-1);
     }
 }
 
@@ -90,7 +90,7 @@ Expression * _eval_and(Expression * rhs, Expression * lhs) {
         return createBool(and(rhs->value._bool,lhs->value._bool));
     } else {
         readExitCodeType(TYPE_ERROR,rhsType,lhsType);
-        //return -1;
+        exit(-1);
     }
 }
 
@@ -102,7 +102,7 @@ Expression * _eval_xor(Expression * rhs, Expression * lhs) {
         return createBool(xor(rhs->value._bool,lhs->value._bool));
     } else {
         readExitCodeType(TYPE_ERROR,rhsType,lhsType);
-        //return -1;
+        exit(-1);
     }
 }
 
@@ -114,7 +114,7 @@ Expression * _eval_si(Expression * rhs, Expression * lhs) {
         return createBool(si(rhs->value._bool,lhs->value._bool));
     } else {
         readExitCodeType(TYPE_ERROR,rhsType,lhsType);
-        //return -1;
+        exit(-1);
     }
 }
 
@@ -126,7 +126,7 @@ Expression * _eval_sii(Expression * rhs, Expression * lhs) {
         return createBool(sii(rhs->value._bool,lhs->value._bool));
     } else {
         readExitCodeType(TYPE_ERROR,rhsType,lhsType);
-        //return -1;
+        exit(-1);
     }
 }
 
@@ -146,7 +146,7 @@ Expression * _eval_less(Expression * rhs, Expression * lhs) {
         return createBool(rhs->value._char < lhs->value._char ? TRUE : FALSE);
     } else {
         readExitCodeType(TYPE_ERROR, rhsType, lhsType);
-        //return -1;
+        exit(-1);
     }
 }
 
@@ -166,7 +166,7 @@ Expression * _eval_less_eq(Expression * rhs, Expression * lhs) {
         return createBool(rhs->value._char <= lhs->value._char ? TRUE : FALSE);
     } else {
         readExitCodeType(TYPE_ERROR, rhsType, lhsType);
-        //return -1;
+        exit(-1);
     }
 }
 
@@ -186,7 +186,7 @@ Expression * _eval_more(Expression * rhs, Expression * lhs) {
         return createBool(rhs->value._char > lhs->value._char ? TRUE : FALSE);
     } else {
         readExitCodeType(TYPE_ERROR, rhsType, lhsType);
-        //return -1;
+        exit(-1);
     }
 }
 
@@ -206,7 +206,7 @@ Expression * _eval_more_eq(Expression * rhs, Expression * lhs) {
         return createBool(rhs->value._char >= lhs->value._char ? TRUE : FALSE);
     } else {
         readExitCodeType(TYPE_ERROR, rhsType, lhsType);
-        //return -1;
+        exit(-1);
     }
 }
 
@@ -226,7 +226,7 @@ Expression * _eval_not_eq(Expression * rhs, Expression * lhs) {
         return createBool(rhs->value._char != lhs->value._char ? TRUE : FALSE);
     } else {
         readExitCodeType(TYPE_ERROR, rhsType, lhsType);
-        //return -1;
+        exit(-1);
     }
 }
 
@@ -246,7 +246,7 @@ Expression * _eval_double_eq(Expression * rhs, Expression * lhs) {
         return createBool(rhs->value._char == lhs->value._char ? TRUE : FALSE);
     } else {
         readExitCodeType(TYPE_ERROR, rhsType, lhsType);
-        //return -1;
+        exit(-1);
     }
 }
 
@@ -281,7 +281,7 @@ Expression * _un_eval_minus(Expression * e) {
         return createDouble(-e->value._double);
     } else {
         printf("Error, de tipado. No es posible poner un %s negativo",strType[j]);
-        //return -1;
+        exit(-1);
     }
 }
 
@@ -301,6 +301,7 @@ Expression evaluate(Table table, ExpressionStatement * e){
             return binary_evaluate(table, e->_binary);
         default:
             printf("Expresion n-arity evaluation error\n");
+            exit(-1);
     }
 }
 
