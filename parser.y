@@ -2,6 +2,7 @@
     #include <stdio.h>
     #include <string.h>
     #include "hash_table.h"
+    #include "bool.h"
 
     #ifdef PAR_DEBUG
     #define DEBUG_PRINT_PAR(x) printf(x)

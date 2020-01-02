@@ -42,10 +42,10 @@ IDENTITYRULE [[:alpha:]][[:alnum:]]*
 ":"              {DEBUG_PRINT_LEX("%s",":"); return ASSIGNTOK;}
 "="              {DEBUG_PRINT_LEX("%s","="); return EQUALS;}
 ":="             {DEBUG_PRINT_LEX("%s",":="); return ASSIGEQUALS;}
-"Entero"         {yylval.type = INT; DEBUG_PRINT_LEX("%s",yylval.valString); return TYPETOK;}
-"Decimal"        {yylval.type = DOUBLE; DEBUG_PRINT_LEX("%s",yylval.valString); return TYPETOK;}
-"Proposicion"    {yylval.type = BOOL; DEBUG_PRINT_LEX("%s",yylval.valString); return TYPETOK;}
-"Letra"          {yylval.type = CHAR; DEBUG_PRINT_LEX("%s",yylval.valString); return TYPETOK;}
+"Entero"         {yylval.type = INT; DEBUG_PRINT_LEX("%s","INT"); return TYPETOK;}
+"Decimal"        {yylval.type = DOUBLE; DEBUG_PRINT_LEX("%s","DOUBLE"); return TYPETOK;}
+"Proposicion"    {yylval.type = BOOL; DEBUG_PRINT_LEX("%s","BOOL"); return TYPETOK;}
+"Letra"          {yylval.type = CHAR; DEBUG_PRINT_LEX("%s","CHAR"); return TYPETOK;}
 
 
 "imprime"        {DEBUG_PRINT_LEX("%s","imprime"); return IMPRIMIR; /* Comandos */}
