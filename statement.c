@@ -60,7 +60,6 @@ Statement * createDeclArray(char * name, ExpressionStatement * arraySize, Type t
   Statement * st = (Statement *) malloc(sizeof(Statement));
   int size = const_int_eval(arraySize);
   st->type = ARRAY_DECL;
-  st->type == ARRAY_DECL;
   st->st._array_decl.name = strdup(name);
   st->st._array_decl.type = t;
   st->st._array_decl.arraySize = size;
@@ -212,7 +211,7 @@ void execArrayDeclAsig(Table table, Array_Decl_Asig st, int line){
       if(t != UNKNOWN)
         t = getType(expr);
       else if(t!= getType(expr)) {
-        t == UNKNOWN;
+        t = UNKNOWN;
         break;
       }
       p=p->next;
