@@ -325,6 +325,20 @@ Expression * unary_evaluate(Table table, UnExpressionStatement e) {
     }
 }
 
+Expression * array_accessor_evaluate(Table table, ArrayAccessorExpressionStatement acc){
+    Expression ** res;
+    int size;
+    Expression * accessor = evaluate(table, acc.accessor);
+
+    valueOfArray(table, acc.name, res, &size);
+    if(res == NULL) {
+        readExitCodeVariables(VAR_NOT_FOUND_ERROR, acc.name,UNKNOWN,UNKNOWN);
+        exit(-1);
+    }
+    
+    return res[accessor->value._int];
+}
+
 Expression * evaluate(Table table, ExpressionStatement * e){
     Expression * res = NULL;
     switch(e->_n){
@@ -342,6 +356,8 @@ Expression * evaluate(Table table, ExpressionStatement * e){
             exit(-1);
           }
           return res;
+        case ACCESSOR:
+          return array_accessor_evaluate(table, e->_e._acc);
         default:
             printf("Expresion n-arity evaluation error\n");
             exit(-1);
