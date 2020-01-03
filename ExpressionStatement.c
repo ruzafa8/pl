@@ -327,17 +327,17 @@ Expression * unary_evaluate(Table table, UnExpressionStatement e) {
 }
 
 Expression * array_accessor_evaluate(Table table, ArrayAccessorExpressionStatement acc){
-    Expression ** res;
+    Expression * res;
     int size;
     Expression * accessor = evaluate(table, acc.accessor);
 
-    valueOfArray(table, acc.name, res, &size);
+    valueOfArray(table, acc.name, &res, &size);
     if(res == NULL) {
         readExitCodeVariables(VAR_NOT_FOUND_ERROR, acc.name,UNKNOWN,UNKNOWN);
         exit(-1);
     }
 
-    return res[accessor->value._int];
+    return &res[accessor->value._int];
 }
 
 Expression * evaluate(Table table, ExpressionStatement * e){
