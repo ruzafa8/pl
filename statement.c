@@ -332,11 +332,20 @@ void execArrayAccAsig(Table table, Array_Acc_Asig st, int line){
         return;
   }
 
+  switch(getType(e)){
+    case    INT: code = changeArrayInt(table,st.name,e->value._int, accessor);       break;
+    case   BOOL: code = changeArrayBool(table,st.name,e->value._bool, accessor);     break;
+    case   CHAR: code = changeArrayChar(table,st.name,e->value._char, accessor);     break;
+    case DOUBLE: code = changeArrayDouble(table,st.name,e->value._double, accessor); break;
+
+  }
+  Expression * var;
+  int *size;
   switch(code){
     case SUCCESS: break;
     case TYPE_DOESNT_AGREE:
-      valueOf(table,st.name,&var);
-      printf("Error linea %d, se ha intentado asignar un %s a la variable %s pero es de tipo %s",
+      valueOfArray(table,st.name,&var,&size);
+      printf("Error linea %d, se ha intentado asignar un %s al array %s pero es de tipo %s",
              line,strType[getType(e)],st.name,strType[getType(var)]);
       break;
     case VAR_NOT_FOUND_ERROR:
