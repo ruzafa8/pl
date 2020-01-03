@@ -85,6 +85,7 @@ IDENTITYRULE [[:alpha:]][[:alnum:]]*
 "mientras" {return MIENTRAS;}
 "haz" {return HAZ;}
 "." {return PUNTO;}
+"," {return COMMA;}
 
 
 
