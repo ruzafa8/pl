@@ -117,6 +117,19 @@ InitiationList * createInitiationList(ExpressionStatement * exp, InitiationList 
   return initList;
 }
 
+void testInitiationList(InitiationList * n) {
+  if(n == NULL)
+    printf("NULL LIST\n");
+  else {
+    printf("List node: ");
+    if(n->e == NULL) {
+        printf("e==Null");
+    } else {
+        printf("e not null");
+    }
+    testInitiationList(n->next);
+  }
+}
 
 Statement * join(Statement * s1, Statement * s2){
   Statement * st = (Statement *) malloc(sizeof(Statement));

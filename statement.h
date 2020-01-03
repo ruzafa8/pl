@@ -118,6 +118,7 @@ Statement * createIfElse(ExpressionStatement * condition, Statement * then_st, S
 Statement * join(Statement * s1, Statement * s2);
 
 InitiationList * createInitiationList(ExpressionStatement * e, InitiationList * n);
+void testInitiationList(InitiationList * n);
 
 void exec(Table table, Statement * s);
 

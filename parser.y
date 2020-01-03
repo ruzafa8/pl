@@ -100,14 +100,13 @@ arrayDecl:
 ;
 
 initList:
-    OPINITLIST expression CLOSINITLIST  { $$ = createInitiationList($2, NULL);}
-  | OPINITLIST ilist CLOSINITLIST       { $$ = $2;}
+  OPINITLIST ilist CLOSINITLIST    { $$ = $2; testInitiationList($2);}
 ;
 
 ilist:
-    expression                          { $$ = createInitiationList($1, NULL);}
-  | expression COMMA ilist              { $$ = createInitiationList($1, $3);}
-  | COMMA ilist                         { $$ = createInitiationList(NULL, $2);}
+    expression                     { $$ = createInitiationList($1, NULL);}
+  | ilist COMMA                    { $$ = createInitiationList(NULL, $1);}
+  | ilist COMMA expression         { $$ = createInitiationList($3, $1);}
  ;
 
 varAssign: IDENTIFIER EQUALS expression { $$ = createAsig($1, $3,yylineno);}
