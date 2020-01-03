@@ -275,6 +275,38 @@ void execArrayDeclAsig(Table table, Array_Decl_Asig st, int line){
   }
 }
 
+void execArrayDecl(Table table, Array_Decl st, int line){
+  EXIT_CODE code = SUCCESS;
+
+  if(st.type == UNKNOWN) {
+    printf("Error línea %d, el tipo de la variable array %s no es valido",line,st.name);
+  } else if (st.arraySize ==0){
+    printf("Error línea %d, el tamaño de la variable array %s no puede ser cero",line,st.name);
+  } else {
+    switch(st.type){
+        case    INT:
+            code = addDefaultArrayInt(table, st.name, st.arraySize);
+            break;
+        case DOUBLE:
+            code = addDefaultArrayDouble(table, st.name, st.arraySize);
+            break;
+        case BOOL:
+            code = addDefaultArrayBool(table, st.name, st.arraySize);
+            break;
+        case CHAR:
+            code = addDefaultArrayChar(table, st.name, st.arraySize);
+            break;
+    }
+
+  }
+  switch (code) {
+    case SUCCESS: break;
+    case VAR_ALREADY_EXISTS_ERROR:
+      printf("Error línea %d, la variable array %s ya existe",line,st.name);
+      break;
+  }
+
+}
 
 void execWhile(Table table, While st, int line){
   EXIT_CODE code;
@@ -330,15 +362,17 @@ void exec(Table table, Statement * s){
   EXIT_CODE code;
   Expression * e;
   switch(s->type){
-    case      DECL: execDecl(table,s->st._decl,s->line);             break;
-    case      ASIG: execAsig(table, s->st._asig,s->line);            break;
-    case DECL_ASIG: execDeclAsig(table,s->st._decl_asig, s->line);   break;
-    case     PRINT: printExpression(evaluate(table,s->st._print.e)); break;
-    case     WHILE: execWhile(table, s->st._while,s->line);          break;
-    case    REPEAT: execRepeat(table, s->st._repeat,s->line);        break;
-    case        IF: execIf(table, s->st._if, s->line);               break;
-    case   IF_ELSE: execIfElse(table, s->st._if_else, s->line);      break;
-    case   COMPOSE:
+    case            DECL: execDecl(table,s->st._decl,s->line);                      break;
+    case            ASIG: execAsig(table, s->st._asig,s->line);                     break;
+    case      ARRAY_DECL: execArrayDecl(table, s->st._array_decl, s->line);         break;
+    case ARRAY_DECL_ASIG: execArrayDeclAsig(table, s->st._array_decl_asig, s->line);break;
+    case       DECL_ASIG: execDeclAsig(table,s->st._decl_asig, s->line);            break;
+    case           PRINT: printExpression(evaluate(table,s->st._print.e));          break;
+    case           WHILE: execWhile(table, s->st._while,s->line);                   break;
+    case          REPEAT: execRepeat(table, s->st._repeat,s->line);                 break;
+    case              IF: execIf(table, s->st._if, s->line);                        break;
+    case         IF_ELSE: execIfElse(table, s->st._if_else, s->line);               break;
+    case         COMPOSE:
       exec(table,s->st._compose.s1);
       exec(table,s->st._compose.s2);
       break;
