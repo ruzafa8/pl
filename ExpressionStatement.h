@@ -13,7 +13,7 @@ typedef enum {
 } UnExpressionKind;
 
 typedef enum {
-	UNARY, BINARY, LITERAL, VARIABLE
+	UNARY, BINARY, LITERAL, VARIABLE, ACCESSOR
 } ExpressionNarity;
 
 //Resolve circular definition
@@ -37,11 +37,17 @@ typedef struct _litexprstatement{
 	Expression * e;
 } LitExpressionStatement;
 
-typedef struct {
+typedef struct _varexprstatement{
 	char * name;
 } VarExpressionStatement;
 
+typedef struct {
+	char * name;
+	ExpressionStatement * accessor;
+} ArrayAccessorExpressionStatement;
+
 typedef union _naryexprstatement{
+	ArrayAccessorExpressionStatement _acc;
 	VarExpressionStatement _var;
 	LitExpressionStatement _lit;
 	BinExpressionStatement _binary;
@@ -58,4 +64,5 @@ ExpressionStatement * createBinExpression(BinExpressionKind k, ExpressionStateme
 ExpressionStatement * createUnExpression(UnExpressionKind k, ExpressionStatement * e);
 ExpressionStatement * createLiteralExpression(Expression * e);
 ExpressionStatement * createVariableExpression(char * name);
+ExpressionStatement * createArrayAccessorExpression(char * name, ExpressionStatement *accessor);
 int const_int_eval(ExpressionStatement * e);

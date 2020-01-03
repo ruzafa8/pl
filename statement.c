@@ -16,6 +16,17 @@ Statement * createAsig(char * name, ExpressionStatement * e, int line){
   st->line = line;
   return st;
 }
+
+Statement * createArrayAccessorAsig(char * name, ExpressionStatement * accessor, ExpressionStatement * e, int line){
+  Statement * st = (Statement *) malloc(sizeof(Statement));
+  st->type = ARRAY_ACC_ASIG;
+  st->st._array_acc_asig.name = strdup(name);
+  st->st._array_acc_asig.acc = accessor;
+  st->st._array_acc_asig.e = e;
+  st->line = line;
+  return st;
+}
+
 Statement * createDeclAsig(char *name, Type t, ExpressionStatement * e, int line){
   Statement * st = (Statement *) malloc(sizeof(Statement));
   st->type = DECL_ASIG;

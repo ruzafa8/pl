@@ -383,6 +383,15 @@ ExpressionStatement * createVariableExpression(char * name){
   return st;
 }
 
+ExpressionStatement * createArrayAccessorExpression(char * name, ExpressionStatement *accessor){
+  ExpressionStatement * st = (ExpressionStatement *) malloc(sizeof(ExpressionStatement));
+  st->_n = ACCESSOR;
+  st->_e._acc.name = strdup(name);
+  st->_e._acc.accessor = accessor;
+
+  return st;
+}
+
 int const_int_eval(ExpressionStatement * e){
   if(e->_n == LITERAL){
     Expression * exp = evaluate(e);

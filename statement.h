@@ -6,7 +6,7 @@
 
 typedef enum  {
 	DECL, ASIG, DECL_ASIG, PRINT, WHILE, REPEAT, IF, IF_ELSE, COMPOSE,
-	ARRAY_DECL_ASIG, ARRAY_DECL
+	ARRAY_DECL_ASIG, ARRAY_DECL, ARRAY_ACC_ASIG
 } StatementType;
 
 typedef struct _inlist {
@@ -44,6 +44,11 @@ typedef struct {
 	InitiationList * initList;
 } Array_Decl_Asig;
 
+typedef struct {
+	char * name;
+	ExpressionStatement *acc;
+	ExpressionStatement *e;
+} Array_Acc_Asig;
 
 typedef struct {
 	ExpressionStatement * e;
@@ -81,6 +86,7 @@ typedef union {
 	Asig _asig;
 	Decl_Asig _decl_asig;
 	Array_Decl_Asig _array_decl_asig;
+	Array_Acc_Asig _array_acc_asig;
 	Print _print;
 	While _while;
 	Repeat _repeat;
@@ -101,6 +107,7 @@ Statement * createDeclAsig(char *name, Type t, ExpressionStatement * e, int line
 
 Statement * createDeclAsigArray(char * name, ExpressionStatement * arraySize, Type t, InitiationList * initList, int line);
 Statement * createDeclArray(char * name, ExpressionStatement * arraySize, Type t, int line);
+Statement * createArrayAccessorAsig(char * name, ExpressionStatement * accessor, ExpressionStatement * e, int line);
 
 Statement * createPrint(ExpressionStatement * e, int line);
 Statement * createWhile(ExpressionStatement * condition, Statement * body, int line);

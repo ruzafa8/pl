@@ -78,6 +78,7 @@ sentences:
 sentence:
   varDecl
   | arrayDecl
+  | arrayAccessorAssign
   | varAssign | conditional | while_sentence | repeat {$$ = $1;}
   | IMPRIMIR expression {DEBUG_PRINT_PAR("Imprimir:\n");$$ = createPrint($2,yylineno);}
 
@@ -105,6 +106,10 @@ initList:
 
 varAssign: IDENTIFIER EQUALS expression { $$ = createAsig($1, $3,yylineno);}
 ;
+
+arrayAccessorAssign: IDENTIFIER PUNTO expression EQUALS expression { $$ = createArrayAccessorAsig($1,$3,$5,yylineno);}
+;
+
 
 conditional:
   IFTOK expression THENTOK sentences PUNTO { $$ = createIf($2,$4,yylineno);}
@@ -161,6 +166,7 @@ h: MINUSTOK i {$$ = createUnExpression(UN_MINUS, $2);}
 i: OPPARTH expression CLOSPARTH {$$ = $2;}
   | literal {$$ = $1;}
   | IDENTIFIER {$$ = createVariableExpression($1);}
+  | IDENTIFIER PUNTO expression {$$ = createArrayAccessorExpression($1,$3);}
   ;
 literal:
   ENTERO | DOBLE | CARACTER | PROPOSICION {$$ = $1;}
