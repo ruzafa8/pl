@@ -5,7 +5,8 @@
 #include "ExpressionStatement.h"
 
 typedef enum  {
-	DECL, ASIG, DECL_ASIG, PRINT, WHILE, REPEAT, IF, IF_ELSE, COMPOSE
+	DECL, ASIG, DECL_ASIG, PRINT, WHILE, REPEAT, IF, IF_ELSE, COMPOSE,
+	ARRAY_DECL_ASIG, ARRAY_DECL
 } StatementType;
 
 
@@ -24,6 +25,20 @@ typedef struct {
 	Type type;
 	ExpressionStatement *e;
 } Decl_Asig;
+
+typedef struct {
+	char * name;
+	int arraySize;
+	Type type;
+} Array_Decl;
+
+typedef struct {
+	char * name;
+	Type type;
+	int arraySize;
+	InitiationList * initList;
+} Array_Decl_Asig;
+
 
 typedef struct {
 	ExpressionStatement * e;
@@ -57,8 +72,10 @@ typedef struct {
 
 typedef union {
 	Decl _decl;
+	Array_Decl _array_decl;
 	Asig _asig;
 	Decl_Asig _decl_asig;
+	Array_Decl_Asig _array_decl_asig;
 	Print _print;
 	While _while;
 	Repeat _repeat;
@@ -82,7 +99,8 @@ Statement * createDecl(char * name, Type type, int line);
 Statement * createAsig(char * name, ExpressionStatement * e, int line);
 Statement * createDeclAsig(char *name, Type t, ExpressionStatement * e, int line);
 
-Statement * createDeclAsigArray(char *name, Type t, ExpressionStatement * e, int line);
+Statement * createDeclAsigArray(char * name, ExpressionStatement * arraySize, Type t, InitiationList * initList, int line);
+Statement * createDeclArray(char * name, ExpressionStatement * arraySize, Type t, int line);
 
 Statement * createPrint(ExpressionStatement * e, int line);
 Statement * createWhile(ExpressionStatement * condition, Statement * body, int line);
@@ -92,7 +110,7 @@ Statement * createIfElse(ExpressionStatement * condition, Statement * then_st, S
 
 Statement * join(Statement * s1, Statement * s2);
 
-InitiationList * createInitiationList(ExpressionStatement * e, InitiationList * n );
+InitiationList * createInitiationList(ExpressionStatement * e, InitiationList * n);
 
 void exec(Table table, Statement * s);
 

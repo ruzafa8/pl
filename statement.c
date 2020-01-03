@@ -25,6 +25,38 @@ Statement * createDeclAsig(char *name, Type t, ExpressionStatement * e, int line
   st->line = line;
   return st;
 }
+
+Statement * createDeclAsigArray(char * name, ExpressionStatement * arraySize, Type t, InitiationList * initList, int line){
+  Statement * st = (Statement *) malloc(sizeof(Statement));
+  int size = const_int_eval(arraySize);
+  if(size == 0) {
+      InitiationList * p = initList;
+      while(p!=NULL){
+          p=p->next;
+          size++;
+      }
+  }
+  st->type = ARRAY_DECL_ASIG;
+  st->st._array_decl_asig.name = strdup(name);
+  st->st._array_decl_asig.t = t;
+  st->st._array_decl_asig.arraySize = size;
+  st->st._array_decl_asig.initList = initList;
+
+  st->line = line;
+  return st;
+}
+Statement * createDeclArray(char * name, ExpressionStatement * arraySize, Type t, int line){
+  Statement * st = (Statement *) malloc(sizeof(Statement));
+  int size = const_int_eval(arraySize);
+
+  st->type == ARRAY_DECL;
+  st->st._array_decl.name = strdup(name);
+  st->st._array_decl.type = t;
+  st->st._array_decl.arraySize = size;
+  st->line = line;
+  return st;
+}
+
 Statement * createPrint(ExpressionStatement * e, int line){
   Statement * st = (Statement *) malloc(sizeof(Statement));
   st->type = PRINT;
