@@ -181,7 +181,7 @@ void execAsig(Table table, Asig st, int line){
 }
 
 void execDeclAsig(Table table, Decl_Asig st, int line){
-  EXIT_CODE code;
+  EXIT_CODE code = SUCCESS;
   Expression * e = evaluate(table,st.e);
   if(st.type == getType(e) || st.type == UNKNOWN)
   switch(getType(e)){
@@ -353,11 +353,11 @@ void execArrayAccAsig(Table table, Array_Acc_Asig st, int line){
 
   }
   Expression * var;
-  int *size;
+  int size;
   switch(code){
     case SUCCESS: break;
     case TYPE_DOESNT_AGREE:
-      valueOfArray(table,st.name,&var,size);
+      valueOfArray(table,st.name,&var,&size);
       printf("Error linea %d, se ha intentado asignar un %s al array %s pero es de tipo %s",
              line,strType[getType(e)],st.name,strType[getType(var)]);
       break;

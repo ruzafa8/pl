@@ -2,7 +2,6 @@
   #include <stdio.h>
   #include "y.tab.h"
 
-  #define LEX_DEBUG
 
   #ifdef LEX_DEBUG
   #define DEBUG_PRINT_LEX(s,x) printf(s,x)
