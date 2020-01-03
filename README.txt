@@ -32,7 +32,7 @@ una __________:
 Los ficheros que hay en el proyecto son:
 	- lexer.l
 	- parser.y
-	- Makefike
+	- Makefile
 	- bool.h / .c => Para gestionar la variable de tipo Proposicion
 	- error.h => Para gestionar los errores a nivel semántico 
 		    (Por ejemplo, poner un Caracter en la condición del if,
@@ -42,3 +42,20 @@ Los ficheros que hay en el proyecto son:
 	- ExpressionStatement.h /.c => Encapsula las expresiones sin evaluarlas.
 	- hash_table.c / .h => Para gestionar las variables del programa.
 	- statement.c /.h => Para encapsular las sentencias y montar el arbol de ejecución.
+
+
+
+A la hora de tratar errores, se ha creado en el fichero error.h un enumerado
+que se utiliza como código de error y salida en aquellas operaciones que pueden tener errores,
+por ejemplo, de tipado. Estos errores son indicados al usuario dependiendo de como hayan
+ocurrido.
+    Ej. 
+	Var : Entero = 2
+	Bar : Proposicion = Verdadero
+	imprime ( Var / Bar)
+    >$ Error linea, operación no definida para los tipos Entero y Proposicion
+
+
+Se ha dado soporte parcial para arrays simples, pero debido a errores en la asignación de valores a
+las posiciones del mismo, estos no funcionan en el programa final. El soporte en el parser
+esta aún incluido en el fichero parser.y
