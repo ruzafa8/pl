@@ -58,3 +58,4 @@ ExpressionStatement * createBinExpression(BinExpressionKind k, ExpressionStateme
 ExpressionStatement * createUnExpression(UnExpressionKind k, ExpressionStatement * e);
 ExpressionStatement * createLiteralExpression(Expression * e);
 ExpressionStatement * createVariableExpression(char * name);
+int const_int_eval(ExpressionStatement * e);
