@@ -32,252 +32,253 @@ int readExitCodeVariables(EXIT_CODE code, char * var, Type exprType ,Type varTyp
   return code;
 }
 
-Expression * _eval_plus(Expression * rhs, Expression * lhs) {
+Expression * _eval_plus(Expression * lhs, Expression * rhs) {
     Type rhsType = getType(rhs);
     Type lhsType = getType(lhs);
 
-    if (rhsType == INT && lhsType == INT) {
-        return createInt(rhs->value._int + lhs->value._int);
-    } else if (rhsType == DOUBLE && lhsType == DOUBLE) {
-        return createDouble(rhs->value._double + lhs->value._double);
-    } else if (rhsType == INT && lhsType == DOUBLE) {
-        return createDouble(rhs->value._int + lhs->value._double);
-    } else if (rhsType == DOUBLE && lhsType == INT) {
-        return createDouble(rhs->value._double + lhs->value._int);
+    if (lhsType == INT && rhsType == INT) {
+        return createInt(rhs->value._int + rhs->value._int);
+    } else if (lhsType == DOUBLE && rhsType == DOUBLE) {
+        return createDouble(rhs->value._double + rhs->value._double);
+    } else if (lhsType == INT && rhsType == DOUBLE) {
+        return createDouble(rhs->value._int + rhs->value._double);
+    } else if (lhsType == DOUBLE && rhsType == INT) {
+        return createDouble(rhs->value._double + rhs->value._int);
     } else {
-        readExitCodeType(TYPE_ERROR,rhsType,lhsType);
+        readExitCodeType(TYPE_ERROR,lhsType,rhsType);
         exit(-1);
     }
 }
 
-Expression * _eval_minus(Expression * rhs, Expression * lhs) {
+Expression * _eval_minus(Expression * lhs, Expression * rhs) {
     Type rhsType = getType(rhs);
     Type lhsType = getType(lhs);
 
-    if (rhsType == INT && lhsType == INT) {
-        return createInt(rhs->value._int - lhs->value._int);
-    } else if (rhsType == DOUBLE && lhsType == DOUBLE) {
-        return createDouble(rhs->value._double - lhs->value._double);
-    } else if (rhsType == INT && lhsType == DOUBLE) {
-        return createDouble(rhs->value._int - lhs->value._double);
-    } else if (rhsType == DOUBLE && lhsType == INT) {
-        return createDouble(rhs->value._double - lhs->value._int);
+    if (lhsType == INT && rhsType == INT) {
+        return createInt(lhs->value._int - rhs->value._int);
+    } else if (lhsType == DOUBLE && rhsType == DOUBLE) {
+        return createDouble(lhs->value._double - rhs->value._double);
+    } else if (lhsType == INT && rhsType == DOUBLE) {
+        return createDouble(lhs->value._int - rhs->value._double);
+    } else if (lhsType == DOUBLE && rhsType == INT) {
+        return createDouble(lhs->value._double - rhs->value._int);
     } else {
-        readExitCodeType(TYPE_ERROR,rhsType,lhsType);
+        readExitCodeType(TYPE_ERROR,lhsType,rhsType);
         exit(-1);
     }
 }
 
-Expression * _eval_mult(Expression * rhs, Expression * lhs) {
+Expression * _eval_mult(Expression * lhs, Expression * rhs) {
     Type rhsType = getType(rhs);
     Type lhsType = getType(lhs);
-    if (rhsType == INT && lhsType == INT) {
-        return createInt(rhs->value._int * lhs->value._int);
-    } else if (rhsType == DOUBLE && lhsType == DOUBLE) {
-        return createDouble(rhs->value._double * lhs->value._double);
-    } else if (rhsType == INT && lhsType == DOUBLE) {
-        return createDouble(rhs->value._int * lhs->value._double);
-    } else if (rhsType == DOUBLE && lhsType == INT) {
-        return createDouble(rhs->value._double * lhs->value._int);
+
+    if (lhsType == INT && rhsType == INT) {
+        return createInt(lhs->value._int * rhs->value._int);
+    } else if (lhsType == DOUBLE && rhsType == DOUBLE) {
+        return createDouble(lhs->value._double * rhs->value._double);
+    } else if (lhsType == INT && rhsType == DOUBLE) {
+        return createDouble(lhs->value._int * rhs->value._double);
+    } else if (lhsType == DOUBLE && rhsType == INT) {
+        return createDouble(lhs->value._double * rhs->value._int);
     } else {
-        readExitCodeType(TYPE_ERROR,rhsType,lhsType);
+        readExitCodeType(TYPE_ERROR,lhsType,rhsType);
         exit(-1);
     }
 }
 
-Expression * _eval_div(Expression * rhs, Expression * lhs) {
+Expression * _eval_div(Expression * lhs, Expression * rhs) {
     Type rhsType = getType(rhs);
     Type lhsType = getType(lhs);
-    if (rhsType == INT && lhsType == INT) {
-        return createInt(rhs->value._int / lhs->value._int);
-    } else if (rhsType == DOUBLE && lhsType == DOUBLE) {
-        return createDouble(rhs->value._double / lhs->value._double);
-    } else if (rhsType == INT && lhsType == DOUBLE) {
-        return createDouble(rhs->value._int / lhs->value._double);
-    } else if (rhsType == DOUBLE && lhsType == INT) {
-        return createDouble(rhs->value._double / lhs->value._int);
+    if (lhsType == INT && rhsType == INT) {
+        return createInt(lhs->value._int / rhs->value._int);
+    } else if (lhsType == DOUBLE && rhsType == DOUBLE) {
+        return createDouble(lhs->value._double / rhs->value._double);
+    } else if (lhsType == INT && rhsType == DOUBLE) {
+        return createDouble(lhs->value._int / rhs->value._double);
+    } else if (lhsType == DOUBLE && rhsType == INT) {
+        return createDouble(lhs->value._double / rhs->value._int);
     } else {
-        readExitCodeType(TYPE_ERROR,rhsType,lhsType);
+        readExitCodeType(TYPE_ERROR,lhsType,rhsType);
         exit(-1);
     }
 }
 
-Expression * _eval_or(Expression * rhs, Expression * lhs) {
+Expression * _eval_or(Expression * lhs, Expression * rhs) {
     Type rhsType = getType(rhs);
     Type lhsType = getType(lhs);
 
-    if(rhsType == BOOL && lhsType == BOOL){
-        return createBool(or(rhs->value._bool,lhs->value._bool));
+    if(lhsType == BOOL && rhsType == BOOL){
+        return createBool(or(lhs->value._bool,rhs->value._bool));
     } else {
-        readExitCodeType(TYPE_ERROR,rhsType,lhsType);
+        readExitCodeType(TYPE_ERROR,lhsType,rhsType);
         exit(-1);
     }
 }
 
-Expression * _eval_and(Expression * rhs, Expression * lhs) {
+Expression * _eval_and(Expression * lhs, Expression * rhs) {
     Type rhsType = getType(rhs);
     Type lhsType = getType(lhs);
 
-    if(rhsType == BOOL && lhsType == BOOL){
-        return createBool(and(rhs->value._bool,lhs->value._bool));
+    if(lhsType == BOOL && rhsType == BOOL){
+        return createBool(and(lhs->value._bool,rhs->value._bool));
     } else {
-        readExitCodeType(TYPE_ERROR,rhsType,lhsType);
+        readExitCodeType(TYPE_ERROR,lhsType,rhsType);
         exit(-1);
     }
 }
 
-Expression * _eval_xor(Expression * rhs, Expression * lhs) {
+Expression * _eval_xor(Expression * lhs, Expression * rhs) {
     Type rhsType = getType(rhs);
     Type lhsType = getType(lhs);
 
-    if(rhsType == BOOL && lhsType == BOOL){
-        return createBool(xor(rhs->value._bool,lhs->value._bool));
+    if(lhsType == BOOL && rhsType == BOOL){
+        return createBool(xor(lhs->value._bool,rhs->value._bool));
     } else {
-        readExitCodeType(TYPE_ERROR,rhsType,lhsType);
+        readExitCodeType(TYPE_ERROR,lhsType,rhsType);
         exit(-1);
     }
 }
 
-Expression * _eval_si(Expression * rhs, Expression * lhs) {
+Expression * _eval_si(Expression * lhs, Expression * rhs) {
     Type rhsType = getType(rhs);
     Type lhsType = getType(lhs);
 
-    if(rhsType == BOOL && lhsType == BOOL){
-        return createBool(si(rhs->value._bool,lhs->value._bool));
+    if(lhsType == BOOL && rhsType == BOOL){
+        return createBool(si(lhs->value._bool,rhs->value._bool));
     } else {
-        readExitCodeType(TYPE_ERROR,rhsType,lhsType);
+        readExitCodeType(TYPE_ERROR,lhsType,rhsType);
         exit(-1);
     }
 }
 
-Expression * _eval_sii(Expression * rhs, Expression * lhs) {
+Expression * _eval_sii(Expression * lhs, Expression * rhs) {
     Type rhsType = getType(rhs);
     Type lhsType = getType(lhs);
 
-    if(rhsType == BOOL && lhsType == BOOL){
-        return createBool(sii(rhs->value._bool,lhs->value._bool));
+    if(lhsType == BOOL && rhsType == BOOL){
+        return createBool(sii(lhs->value._bool,rhs->value._bool));
     } else {
-        readExitCodeType(TYPE_ERROR,rhsType,lhsType);
+        readExitCodeType(TYPE_ERROR,lhsType,rhsType);
         exit(-1);
     }
 }
 
-Expression * _eval_less(Expression * rhs, Expression * lhs) {
+Expression * _eval_less(Expression * lhs, Expression * rhs) {
     Type rhsType = getType(rhs);
     Type lhsType = getType(lhs);
 
-    if(rhsType == INT && lhsType == INT){
-        return createBool(rhs->value._int < lhs->value._int ? TRUE : FALSE);
-    } else if (rhsType == DOUBLE && lhsType == DOUBLE){
-        return createBool(rhs->value._double < lhs->value._double ? TRUE : FALSE);
-    } else if(rhsType == INT && lhsType == DOUBLE) {
-        return createBool(rhs->value._int < lhs->value._double ? TRUE : FALSE);
-    } else if (rhsType == DOUBLE && lhsType == INT){
-        return createBool(rhs->value._double < lhs->value._int ? TRUE : FALSE);
-    } else if(rhsType == CHAR && lhsType == CHAR){
-        return createBool(rhs->value._char < lhs->value._char ? TRUE : FALSE);
+    if(lhsType == INT && rhsType == INT){
+        return createBool(lhs->value._int < rhs->value._int ? TRUE : FALSE);
+    } else if (lhsType == DOUBLE && rhsType == DOUBLE){
+        return createBool(lhs->value._double < rhs->value._double ? TRUE : FALSE);
+    } else if(lhsType == INT && rhsType == DOUBLE) {
+        return createBool(lhs->value._int < rhs->value._double ? TRUE : FALSE);
+    } else if (lhsType == DOUBLE && rhsType == INT){
+        return createBool(lhs->value._double < rhs->value._int ? TRUE : FALSE);
+    } else if(lhsType == CHAR && rhsType == CHAR){
+        return createBool(lhs->value._char < rhs->value._char ? TRUE : FALSE);
     } else {
-        readExitCodeType(TYPE_ERROR, rhsType, lhsType);
+        readExitCodeType(TYPE_ERROR, lhsType, rhsType);
         exit(-1);
     }
 }
 
-Expression * _eval_less_eq(Expression * rhs, Expression * lhs) {
+Expression * _eval_less_eq(Expression * lhs, Expression * rhs) {
     Type rhsType = getType(rhs);
     Type lhsType = getType(lhs);
 
-    if(rhsType == INT && lhsType == INT){
-        return createBool(rhs->value._int <= lhs->value._int ? TRUE : FALSE);
-    } else if (rhsType == DOUBLE && lhsType == DOUBLE){
-        return createBool(rhs->value._double <= lhs->value._double ? TRUE : FALSE);
-    } else if(rhsType == INT && lhsType == DOUBLE) {
-        return createBool(rhs->value._int <= lhs->value._double ? TRUE : FALSE);
-    } else if (rhsType == DOUBLE && lhsType == INT){
-        return createBool(rhs->value._double <= lhs->value._int ? TRUE : FALSE);
-    } else if(rhsType == CHAR && lhsType == CHAR){
-        return createBool(rhs->value._char <= lhs->value._char ? TRUE : FALSE);
+    if(lhsType == INT && rhsType == INT){
+        return createBool(lhs->value._int <= rhs->value._int ? TRUE : FALSE);
+    } else if (lhsType == DOUBLE && rhsType == DOUBLE){
+        return createBool(lhs->value._double <= rhs->value._double ? TRUE : FALSE);
+    } else if(lhsType == INT && rhsType == DOUBLE) {
+        return createBool(lhs->value._int <= rhs->value._double ? TRUE : FALSE);
+    } else if (lhsType == DOUBLE && rhsType == INT){
+        return createBool(lhs->value._double <= rhs->value._int ? TRUE : FALSE);
+    } else if(lhsType == CHAR && rhsType == CHAR){
+        return createBool(lhs->value._char <= rhs->value._char ? TRUE : FALSE);
     } else {
-        readExitCodeType(TYPE_ERROR, rhsType, lhsType);
+        readExitCodeType(TYPE_ERROR, lhsType, rhsType);
         exit(-1);
     }
 }
 
-Expression * _eval_more(Expression * rhs, Expression * lhs) {
+Expression * _eval_more(Expression * lhs, Expression * rhs) {
     Type rhsType = getType(rhs);
     Type lhsType = getType(lhs);
 
-    if(rhsType == INT && lhsType == INT){
-        return createBool(rhs->value._int > lhs->value._int ? TRUE : FALSE);
-    } else if (rhsType == DOUBLE && lhsType == DOUBLE){
-        return createBool(rhs->value._double > lhs->value._double ? TRUE : FALSE);
-    } else if(rhsType == INT && lhsType == DOUBLE) {
-        return createBool(rhs->value._int > lhs->value._double ? TRUE : FALSE);
-    } else if (rhsType == DOUBLE && lhsType == INT){
-        return createBool(rhs->value._double > lhs->value._int ? TRUE : FALSE);
-    } else if(rhsType == CHAR && lhsType == CHAR){
-        return createBool(rhs->value._char > lhs->value._char ? TRUE : FALSE);
+    if(lhsType == INT && rhsType == INT){
+        return createBool(lhs->value._int > rhs->value._int ? TRUE : FALSE);
+    } else if (lhsType == DOUBLE && rhsType == DOUBLE){
+        return createBool(lhs->value._double > rhs->value._double ? TRUE : FALSE);
+    } else if(lhsType == INT && rhsType == DOUBLE) {
+        return createBool(lhs->value._int > rhs->value._double ? TRUE : FALSE);
+    } else if (lhsType == DOUBLE && rhsType == INT){
+        return createBool(lhs->value._double > rhs->value._int ? TRUE : FALSE);
+    } else if(lhsType == CHAR && rhsType == CHAR){
+        return createBool(lhs->value._char > rhs->value._char ? TRUE : FALSE);
     } else {
-        readExitCodeType(TYPE_ERROR, rhsType, lhsType);
+        readExitCodeType(TYPE_ERROR, lhsType, rhsType);
         exit(-1);
     }
 }
 
-Expression * _eval_more_eq(Expression * rhs, Expression * lhs) {
+Expression * _eval_more_eq(Expression * lhs, Expression * rhs) {
     Type rhsType = getType(rhs);
     Type lhsType = getType(lhs);
 
-    if(rhsType == INT && lhsType == INT){
-        return createBool(rhs->value._int >= lhs->value._int ? TRUE : FALSE);
-    } else if (rhsType == DOUBLE && lhsType == DOUBLE){
-        return createBool(rhs->value._double >= lhs->value._double ? TRUE : FALSE);
-    } else if(rhsType == INT && lhsType == DOUBLE) {
-        return createBool(rhs->value._int >= lhs->value._double ? TRUE : FALSE);
-    } else if (rhsType == DOUBLE && lhsType == INT){
-        return createBool(rhs->value._double >= lhs->value._int ? TRUE : FALSE);
-    } else if(rhsType == CHAR && lhsType == CHAR){
-        return createBool(rhs->value._char >= lhs->value._char ? TRUE : FALSE);
+    if(lhsType == INT && rhsType == INT){
+        return createBool(lhs->value._int >= rhs->value._int ? TRUE : FALSE);
+    } else if (lhsType == DOUBLE && rhsType == DOUBLE){
+        return createBool(lhs->value._double >= rhs->value._double ? TRUE : FALSE);
+    } else if(lhsType == INT && rhsType == DOUBLE) {
+        return createBool(lhs->value._int >= rhs->value._double ? TRUE : FALSE);
+    } else if (lhsType == DOUBLE && rhsType == INT){
+        return createBool(lhs->value._double >= rhs->value._int ? TRUE : FALSE);
+    } else if(lhsType == CHAR && rhsType == CHAR){
+        return createBool(lhs->value._char >= rhs->value._char ? TRUE : FALSE);
     } else {
-        readExitCodeType(TYPE_ERROR, rhsType, lhsType);
+        readExitCodeType(TYPE_ERROR, lhsType, rhsType);
         exit(-1);
     }
 }
 
-Expression * _eval_not_eq(Expression * rhs, Expression * lhs) {
+Expression * _eval_not_eq(Expression * lhs, Expression * rhs) {
     Type rhsType = getType(rhs);
     Type lhsType = getType(lhs);
 
-    if(rhsType == INT && lhsType == INT){
-        return createBool(rhs->value._int != lhs->value._int ? TRUE : FALSE);
-    } else if (rhsType == DOUBLE && lhsType == DOUBLE){
-        return createBool(rhs->value._double != lhs->value._double ? TRUE : FALSE);
-    } else if(rhsType == INT && lhsType == DOUBLE) {
-        return createBool(rhs->value._int != lhs->value._double ? TRUE : FALSE);
-    } else if (rhsType == DOUBLE && lhsType == INT){
-        return createBool(rhs->value._double != lhs->value._int ? TRUE : FALSE);
-    } else if(rhsType == CHAR && lhsType == CHAR){
-        return createBool(rhs->value._char != lhs->value._char ? TRUE : FALSE);
+    if(lhsType == INT && rhsType == INT){
+        return createBool(lhs->value._int != rhs->value._int ? TRUE : FALSE);
+    } else if (lhsType == DOUBLE && rhsType == DOUBLE){
+        return createBool(lhs->value._double != rhs->value._double ? TRUE : FALSE);
+    } else if(lhsType == INT && rhsType == DOUBLE) {
+        return createBool(lhs->value._int != rhs->value._double ? TRUE : FALSE);
+    } else if (lhsType == DOUBLE && rhsType == INT){
+        return createBool(lhs->value._double != rhs->value._int ? TRUE : FALSE);
+    } else if(lhsType == CHAR && rhsType == CHAR){
+        return createBool(lhs->value._char != rhs->value._char ? TRUE : FALSE);
     } else {
-        readExitCodeType(TYPE_ERROR, rhsType, lhsType);
+        readExitCodeType(TYPE_ERROR, lhsType, rhsType);
         exit(-1);
     }
 }
 
-Expression * _eval_double_eq(Expression * rhs, Expression * lhs) {
+Expression * _eval_double_eq(Expression * lhs, Expression * rhs) {
     Type rhsType = getType(rhs);
     Type lhsType = getType(lhs);
 
-    if(rhsType == INT && lhsType == INT){
-        return createBool(rhs->value._int == lhs->value._int ? TRUE : FALSE);
-    } else if (rhsType == DOUBLE && lhsType == DOUBLE){
-        return createBool(rhs->value._double == lhs->value._double ? TRUE : FALSE);
-    } else if(rhsType == INT && lhsType == DOUBLE) {
-        return createBool(rhs->value._int == lhs->value._double ? TRUE : FALSE);
-    } else if (rhsType == DOUBLE && lhsType == INT){
-        return createBool(rhs->value._double == lhs->value._int ? TRUE : FALSE);
-    } else if(rhsType == CHAR && lhsType == CHAR){
-        return createBool(rhs->value._char == lhs->value._char ? TRUE : FALSE);
+    if(lhsType == INT && rhsType == INT){
+        return createBool(lhs->value._int == rhs->value._int ? TRUE : FALSE);
+    } else if (lhsType == DOUBLE && rhsType == DOUBLE){
+        return createBool(lhs->value._double == rhs->value._double ? TRUE : FALSE);
+    } else if(lhsType == INT && rhsType == DOUBLE) {
+        return createBool(lhs->value._int == rhs->value._double ? TRUE : FALSE);
+    } else if (lhsType == DOUBLE && rhsType == INT){
+        return createBool(lhs->value._double == rhs->value._int ? TRUE : FALSE);
+    } else if(lhsType == CHAR && rhsType == CHAR){
+        return createBool(lhs->value._char == rhs->value._char ? TRUE : FALSE);
     } else {
-        readExitCodeType(TYPE_ERROR, rhsType, lhsType);
+        readExitCodeType(TYPE_ERROR, lhsType, rhsType);
         exit(-1);
     }
 }
