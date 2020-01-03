@@ -101,7 +101,7 @@ arrayDecl:
 initList:
     expression                  { $$ = createInitiationList($1, NULL);}
   | expression COMMA initList   { $$ = createInitiationList($1, $3);}
-  | COMMA COMMA initList        { $$ = createInitiationList(NULL, $3);}
+  | COMMA initList              { $$ = createInitiationList(NULL, $2);}
 ;
 
 varAssign: IDENTIFIER EQUALS expression { $$ = createAsig($1, $3,yylineno);}
