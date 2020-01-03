@@ -175,6 +175,44 @@ void execDeclAsig(Table table, Decl_Asig st, int line){
   }
 }
 
+void execArrayDeclAsig(Table table, Array_Decl_Asig st, int line){
+  EXIT_CODE code;
+  Type t = st.type;
+  int i = 0;
+  Expression * eArray[st.size];
+  //Walking and autotyping the array
+  InitiationList *p = st.initList;
+  while((p!=NULL) || (t == UNKNOWN)){
+    if(p->e == NULL) 
+      p=p->next;
+    else {
+      expr = evaluate(table, p->e);
+      t = getType(expr);
+      p->p-next;
+    }
+  }
+  if(t == UNKNOWN) {
+    printf("Error línea %d, la lista de inicialización de la variable %s no es valida",line,st.name);
+  } else {
+      //Actual assignation
+      InitiationList *p = st.initList;
+      while(p!=NULL){
+        if(p->e == NULL) {
+            //default value
+            switch(getType(e)){
+                 case    INT: code = addDefaultInt(table, st.name);    break;
+                 case DOUBLE: code = addDefaultDouble(table, st.name); break;
+                 case   BOOL: code = addDefaultBool(table, st.name);   break;
+                 case   CHAR: code = addDefaultChar(table, st.name);   break;
+                 case UNKNOWN: code = add(table,st.name);
+            }
+
+        }
+      }
+  }
+}
+
+
 void execWhile(Table table, While st, int line){
   EXIT_CODE code;
   Expression *e = evaluate(table,st.condition);
