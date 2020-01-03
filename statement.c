@@ -319,6 +319,32 @@ void execArrayDecl(Table table, Array_Decl st, int line){
 
 }
 
+void execArrayAccAsig(Table table, Array_Acc_Asig st, int line){
+  EXIT_CODE code;
+  int accessor;
+  Expression *e = evaluate(table,st.e);
+  Expression *acc = evaluate(table,st.acc);
+
+  switch(getType(acc)){
+    case    INT: accessor = acc->value._int; break;
+    default:
+        printf("Error linea %d, accesores a array solo pueden ser enteros pero es de tipo %s",line,strType[getType(acc)]);
+        return;
+  }
+
+  switch(code){
+    case SUCCESS: break;
+    case TYPE_DOESNT_AGREE:
+      valueOf(table,st.name,&var);
+      printf("Error linea %d, se ha intentado asignar un %s a la variable %s pero es de tipo %s",
+             line,strType[getType(e)],st.name,strType[getType(var)]);
+      break;
+    case VAR_NOT_FOUND_ERROR:
+      printf("Error linea %d, la variable %s no existe", line, st.name);
+      break;
+  }
+}
+
 void execWhile(Table table, While st, int line){
   EXIT_CODE code;
   Expression *e = evaluate(table,st.condition);
@@ -377,6 +403,7 @@ void exec(Table table, Statement * s){
     case            ASIG: execAsig(table, s->st._asig,s->line);                     break;
     case      ARRAY_DECL: execArrayDecl(table, s->st._array_decl, s->line);         break;
     case ARRAY_DECL_ASIG: execArrayDeclAsig(table, s->st._array_decl_asig, s->line);break;
+    case  ARRAY_ACC_ASIG: execArrayAccAsig(table, st->st._array_acc_asig, s->line); break;
     case       DECL_ASIG: execDeclAsig(table,s->st._decl_asig, s->line);            break;
     case           PRINT: printExpression(evaluate(table,s->st._print.e));          break;
     case           WHILE: execWhile(table, s->st._while,s->line);                   break;
