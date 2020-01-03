@@ -385,10 +385,10 @@ ExpressionStatement * createVariableExpression(char * name){
 
 int const_int_eval(ExpressionStatement * e){
   if(e->_n == LITERAL){
-    Expresion * exp = evaluate(e);
+    Expression * exp = evaluate(e);
     if(getType(exp) == INT){
       return exp->value._int;
-    } else printf("Error. No se puede especificar el tamaño de un Array con %s",strType[getType(exp)]);
+    } else printf("Error. No se puede especificar el tamaño de un Array con %s", strType[getType(exp)]);
   } else {
     printf("Error. El tamaño de un array se debe especificar con un valor constante").
   }
