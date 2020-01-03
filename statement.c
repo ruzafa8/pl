@@ -344,7 +344,7 @@ void execArrayAccAsig(Table table, Array_Acc_Asig st, int line){
   switch(code){
     case SUCCESS: break;
     case TYPE_DOESNT_AGREE:
-      valueOfArray(table,st.name,&var,&size);
+      valueOfArray(table,st.name,&var,size);
       printf("Error linea %d, se ha intentado asignar un %s al array %s pero es de tipo %s",
              line,strType[getType(e)],st.name,strType[getType(var)]);
       break;
@@ -412,7 +412,7 @@ void exec(Table table, Statement * s){
     case            ASIG: execAsig(table, s->st._asig,s->line);                     break;
     case      ARRAY_DECL: execArrayDecl(table, s->st._array_decl, s->line);         break;
     case ARRAY_DECL_ASIG: execArrayDeclAsig(table, s->st._array_decl_asig, s->line);break;
-    case  ARRAY_ACC_ASIG: execArrayAccAsig(table, st->st._array_acc_asig, s->line); break;
+    case  ARRAY_ACC_ASIG: execArrayAccAsig(table, s->st._array_acc_asig, s->line); break;
     case       DECL_ASIG: execDeclAsig(table,s->st._decl_asig, s->line);            break;
     case           PRINT: printExpression(evaluate(table,s->st._print.e));          break;
     case           WHILE: execWhile(table, s->st._while,s->line);                   break;
