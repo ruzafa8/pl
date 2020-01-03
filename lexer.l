@@ -61,6 +61,8 @@ IDENTITYRULE [[:alpha:]][[:alnum:]]*
 ")"              {DEBUG_PRINT_LEX("%s",")"); return CLOSPARTH;}
 "["              {DEBUG_PRINT_LEX("%s","["); return OPARRAY;}
 "]"              {DEBUG_PRINT_LEX("%s","]"); return CLOSARRAY;}
+"{"              {DEBUG_PRINT_LEX("%s","{"); return OPINITLIST;}
+"}"              {DEBUG_PRINT_LEX("%s","}"); return CLOSINITLIST;}
 "+"              {DEBUG_PRINT_LEX("%s","+"); return PLUSTOK;}
 "-"              {DEBUG_PRINT_LEX("%s","-"); return MINUSTOK;}
 "*"              {DEBUG_PRINT_LEX("%s","*"); return BYTOK;}

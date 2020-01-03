@@ -56,13 +56,14 @@
 %token <valString> STRING
 
 %token PLUSTOK MINUSTOK BYTOK DIVIDETOK OPPARTH CLOSPARTH OPARRAY CLOSARRAY
+%token OPINITLIST CLOSINITLIST
 %token ORTOK ANDTOK XORTOK SITOK SIITOK LESSTOK LESS_EQTOK MORETOK MORE_EQTOK NOT_EQTOK DOBLE_EQUALSTOK
 %token <expr> ENTERO DOBLE CARACTER PROPOSICION
 %token HAZ MIENTRAS PUNTO COMMA REPITE VECES
 
 %type <expr> expression literal o p q r s t u v w x y z f g h i
 %type <statement> varDecl arrayDecl arrayAccessorAssign varAssign sentence sentences while_sentence conditional repeat
-%type <initlist> initList
+%type <initlist> initList ilist
 %start S
 %% /* grammar */
 
@@ -99,10 +100,15 @@ arrayDecl:
 ;
 
 initList:
-    expression                  { $$ = createInitiationList($1, NULL);}
-  | expression COMMA initList   { $$ = createInitiationList($1, $3);}
-  | COMMA initList              { $$ = createInitiationList(NULL, $2);}
+    OPINITLIST expression CLOSINITLIST  { $$ = createInitiationList($2, NULL);}
+  | OPINITLIST ilist CLOSINITLIST       { $$ = $2;}
 ;
+
+ilist:
+    expression                          { $$ = createInitiationList($1, NULL);}
+  | expression COMMA ilist              { $$ = createInitiationList($1, $3);}
+  | COMMA ilist                         { $$ = createInitiationList(NULL, $2);}
+ ;
 
 varAssign: IDENTIFIER EQUALS expression { $$ = createAsig($1, $3,yylineno);}
 ;
