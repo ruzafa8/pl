@@ -67,6 +67,14 @@ Statement * createIfElse(ExpressionStatement * condition, Statement * then_st, S
   return st;
 }
 
+InitiationList * createInitiationList(ExpressionStatement * exp, InitiationList * n){
+  InitiationList * initList = (InitiationList *) malloc(sizeof(InitiationList));
+  initList->e = exp;
+  initList->next = n;
+  return initList;
+}
+
+
 Statement * join(Statement * s1, Statement * s2){
   Statement * st = (Statement *) malloc(sizeof(Statement));
   st->type = COMPOSE;

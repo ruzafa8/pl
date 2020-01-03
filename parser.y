@@ -49,6 +49,7 @@
 %token IFTOK THENTOK ELSETOK
 %token ASSIGNTOK
 %token <type> TYPETOK           //Enum?
+%token <type> ARRAYTYPETOK
 %token EQUALS
 %token ASSIGEQUALS
 %token <valString> STRING
@@ -59,7 +60,8 @@
 %token HAZ MIENTRAS PUNTO REPITE VECES
 
 %type <expr> expression literal o p q r s t u v w x y z f g h i
-%type <statement> varDecl varAssign sentence sentences while_sentence conditional repeat
+%type <statement> varDecl arrayDecl varAssign sentence sentences while_sentence conditional repeat
+%type <InitiationList> initList
 %start S
 %% /* grammar */
 
@@ -74,6 +76,7 @@ sentences:
 
 sentence:
   varDecl
+  | arrayDecl
   | varAssign | conditional | while_sentence | repeat {$$ = $1;}
   | IMPRIMIR expression {DEBUG_PRINT_PAR("Imprimir:\n");$$ = createPrint($2,yylineno);}
 
@@ -85,6 +88,18 @@ varDecl:
   | IDENTIFIER ASSIGNTOK TYPETOK {$$ = createDecl($1,$3,yylineno);}
   | IDENTIFIER ASSIGEQUALS expression {$$ = createDeclAsig($1,UNKNOWN,$3,yylineno);}
   | IDENTIFIER ASSIGNTOK {$$ = createDecl($1, UNKNOWN,yylineno);}
+;
+
+arrayDecl:
+  IDENTIFIER ASSIGNTOK ENTERO ARRAYTYPETOK EQUALS initList {$$ = createDeclAsigArray($1,$3,$4,$6,yylineno);}
+  | IDENTIFIER ASSIGNTOK ENTERO ARRAYTYPETOK {$$ = createDeclArray($1,$3,$4,yylineno);}
+  | IDENTIFIER ASSIGEQUALS initList {$$ = createDeclAsigArray($1,0,UNKNOWN,$3,yylineno);}
+;
+
+initList:
+    expression                  { $$ = createInitiationList($1, NULL);}
+  | expression COMMA initList   { $$ = createInitiationList($1, $3);}
+  | COMMA COMMA initList        { $$ = createInitiationList(NULL, $3);}
 ;
 
 varAssign: IDENTIFIER EQUALS expression { $$ = createAsig($1, $3,yylineno);}

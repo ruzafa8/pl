@@ -73,9 +73,17 @@ typedef struct _Statement {
 	int line;
 } Statement;
 
+typedef struct _inlist {
+	ExpressionStatement * e;
+	InitiationList * next;
+} InitiationList;
+
 Statement * createDecl(char * name, Type type, int line);
 Statement * createAsig(char * name, ExpressionStatement * e, int line);
 Statement * createDeclAsig(char *name, Type t, ExpressionStatement * e, int line);
+
+Statement * createDeclAsigArray(char *name, Type t, ExpressionStatement * e, int line);
+
 Statement * createPrint(ExpressionStatement * e, int line);
 Statement * createWhile(ExpressionStatement * condition, Statement * body, int line);
 Statement * createRepeat(ExpressionStatement * numIteracions, Statement * body, int line);
@@ -83,6 +91,8 @@ Statement * createIf(ExpressionStatement * condition, Statement * body, int line
 Statement * createIfElse(ExpressionStatement * condition, Statement * then_st, Statement * else_st, int line);
 
 Statement * join(Statement * s1, Statement * s2);
+
+InitiationList * createInitiationList(ExpressionStatement * e, InitiationList * n );
 
 void exec(Table table, Statement * s);
 

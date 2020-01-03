@@ -47,6 +47,11 @@ IDENTITYRULE [[:alpha:]][[:alnum:]]*
 "Proposicion"    {yylval.type = BOOL; DEBUG_PRINT_LEX("%s","BOOL"); return TYPETOK;}
 "Letra"          {yylval.type = CHAR; DEBUG_PRINT_LEX("%s","CHAR"); return TYPETOK;}
 
+"Enteros"        {yylval.type = INT; DEBUG_PRINT_LEX("%s","INTARRAY"); return ARRAYTYPETOK;}
+"Decimales"      {yylval.type = DOUBLE; DEBUG_PRINT_LEX("%s","DOUBLEARRAY"); return ARRAYTYPETOK;}
+"Proposiciones"  {yylval.type = BOOL; DEBUG_PRINT_LEX("%s","BOOLARRAY"); return ARRAYTYPETOK;}
+"Letras"         {yylval.type = CHAR; DEBUG_PRINT_LEX("%s","CHARARRAY"); return ARRAYTYPETOK;}
+
 
 "imprime"        {DEBUG_PRINT_LEX("%s","imprime"); return IMPRIMIR; /* Comandos */}
 "se"             {DEBUG_PRINT_LEX("%s","se"); return IFTOK;}
