@@ -59,7 +59,7 @@ Statement * createDeclAsigArray(char * name, ExpressionStatement * arraySize, Ty
 Statement * createDeclArray(char * name, ExpressionStatement * arraySize, Type t, int line){
   Statement * st = (Statement *) malloc(sizeof(Statement));
   int size = const_int_eval(arraySize);
-
+  st->type = ARRAY_DECL;
   st->type == ARRAY_DECL;
   st->st._array_decl.name = strdup(name);
   st->st._array_decl.type = t;
