@@ -61,7 +61,7 @@
 %token HAZ MIENTRAS PUNTO COMMA REPITE VECES
 
 %type <expr> expression literal o p q r s t u v w x y z f g h i
-%type <statement> varDecl arrayDecl varAssign sentence sentences while_sentence conditional repeat
+%type <statement> varDecl arrayDecl arrayAccessorAssign varAssign sentence sentences while_sentence conditional repeat
 %type <initlist> initList
 %start S
 %% /* grammar */
