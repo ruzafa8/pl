@@ -36,7 +36,7 @@ Statement * createWhile(ExpressionStatement * condition, Statement * body, int l
   Statement * st = (Statement *) malloc(sizeof(Statement));
   st->type = WHILE;
   st->st._while.condition = condition;
-  st->st._while.body = st;
+  st->st._while.body = body;
   st->line = line;
   return st;
 }
@@ -149,6 +149,7 @@ void execWhile(Table table, While st, int line){
   if(getType(e) == BOOL){
     while(e->value._bool == TRUE){
       exec(table,st.body);
+      e = evaluate(table,st.condition);
     }
   } else {
     printf("Error línea %d, se esperaba una Proposicion, pero se encontró %s",line,strType[getType(e)]);
