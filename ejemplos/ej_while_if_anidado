@@ -1,0 +1,7 @@
+i : Entero
+
+mientras i < 5 haz
+	i = i + 1
+	se i == 2 o i == 4 daquela imprime i se non imprime 42.
+.
+

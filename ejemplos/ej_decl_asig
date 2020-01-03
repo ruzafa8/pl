@@ -1,0 +1,11 @@
+x = 4 -- este falla (No se ha declarado)
+x : Entero -- este declara como entero
+x = 5 -- Ahora se iguala a 5
+imprime x -- y lo imprimimos
+
+a : -- También podemos declarar una variable sin tipo
+a = 'l' -- En cuanto le asignamos un valor toma un tipo
+a = 5 -- Pero después no se lo podemos cambiar!
+imprime a
+
+x : -- Tampoco podemos volver a declarar una variable ya declarada
