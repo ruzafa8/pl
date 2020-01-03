@@ -287,21 +287,21 @@ Expression * binary_evaluate(Table table, BinExpressionStatement e){
     Expression * lhs = evaluate(table, e.lhs);
 
     switch(e.kind){
-        case(BIN_PLUS): return _eval_plus(rhs, lhs);
-        case(BIN_MINUS): return _eval_minus(rhs, lhs);
-        case(BIN_BY): return _eval_mult(rhs, lhs);
-        case(BIN_DIVIDE): return _eval_div(rhs, lhs);
-        case(BIN_OR): return _eval_or(rhs, lhs);
-        case(BIN_AND): return _eval_and(rhs, lhs);
-        case(BIN_XOR): return _eval_xor(rhs, lhs);
-        case(BIN_SI): return _eval_si(rhs, lhs);
-        case(BIN_SII): return _eval_sii(rhs, lhs);
-        case(BIN_LESS): return _eval_less(rhs, lhs);
-        case(BIN_LESS_EQ): return _eval_less_eq(rhs, lhs);
-        case(BIN_MORE): return _eval_more(rhs, lhs);
-        case(BIN_MORE_EQ): return _eval_more_eq(rhs, lhs);
-        case(BIN_NOT_EQ): return _eval_not_eq(rhs, lhs);
-        case(BIN_DOBLE_EQUALS): return _eval_double_eq(rhs, lhs);
+        case(BIN_PLUS): return _eval_plus(lhs, rhs);
+        case(BIN_MINUS): return _eval_minus(lhs, rhs);
+        case(BIN_BY): return _eval_mult(lhs, rhs);
+        case(BIN_DIVIDE): return _eval_div(lhs, rhs);
+        case(BIN_OR): return _eval_or(lhs, rhs);
+        case(BIN_AND): return _eval_and(lhs, rhs);
+        case(BIN_XOR): return _eval_xor(lhs, rhs);
+        case(BIN_SI): return _eval_si(lhs, rhs);
+        case(BIN_SII): return _eval_sii(lhs, rhs);
+        case(BIN_LESS): return _eval_less(lhs, rhs);
+        case(BIN_LESS_EQ): return _eval_less_eq(lhs, rhs);
+        case(BIN_MORE): return _eval_more(lhs, rhs);
+        case(BIN_MORE_EQ): return _eval_more_eq(lhs, rhs);
+        case(BIN_NOT_EQ): return _eval_not_eq(lhs, rhs);
+        case(BIN_DOBLE_EQUALS): return _eval_double_eq(lhs, rhs);
     }
 }
 
