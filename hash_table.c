@@ -242,7 +242,7 @@ EXIT_CODE addArrayBool(Table table, const char * var, Bool* value, int len){
   return aux == NULL? SUCCESS : VAR_ALREADY_EXISTS_ERROR;
 }
 
-int valueOfArray(const Table table, const char * var, Expression ** value, int *size){
+int valueOfArray(const Table table, const char * var, Expression ** value, int size){
   Variable * v = *(table + hash(var));
 	int found = 0;
   EXIT_CODE code = VAR_NOT_FOUND_ERROR;
@@ -251,7 +251,7 @@ int valueOfArray(const Table table, const char * var, Expression ** value, int *
 		if(strcmp(var,v->name) == 0){
 			found = 1;
       if (v->len > 0){
-			   *value = v->expression;
+			   *value = ((v->expression) + size);
          code = SUCCESS;
       } else {
         code = IS_NOT_AN_ARRAY;
@@ -265,25 +265,25 @@ int valueOfArray(const Table table, const char * var, Expression ** value, int *
 int isIntArray(const Table table, const char * var){
   Expression * e;
   int len;
-  EXIT_CODE code = valueOfArray(table,var,&e,&len);
+  EXIT_CODE code = valueOfArray(table,var,&e,len);
   return code == SUCCESS && getType(e) == INT;
 }
 int isCharArray(const Table table, const char * var){
   Expression * e;
   int len;
-  EXIT_CODE code = valueOfArray(table,var,&e,&len);
+  EXIT_CODE code = valueOfArray(table,var,&e,len);
   return code == SUCCESS && getType(e) == CHAR;
 }
 int isBoolArray(const Table table, const char * var){
   Expression * e;
   int len;
-  EXIT_CODE code = valueOfArray(table,var,&e,&len);
+  EXIT_CODE code = valueOfArray(table,var,&e,len);
   return code == SUCCESS && getType(e) == BOOL;
 }
 int isDoubleArray(const Table table, const char * var){
   Expression * e;
   int len;
-  EXIT_CODE code = valueOfArray(table,var,&e,&len);
+  EXIT_CODE code = valueOfArray(table,var,&e,len);
   return code == SUCCESS && getType(e) == DOUBLE;
 }
 

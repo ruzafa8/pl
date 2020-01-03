@@ -205,7 +205,7 @@ void execArrayDeclAsig(Table table, Array_Decl_Asig st, int line){
   //Walking and autotyping the array
   InitiationList *p = st.initList;
   while(p!=NULL){
-    if(p->e == NULL) 
+    if(p->e == NULL)
       p=p->next;
     else {
       Expression * expr = evaluate(table, p->e);
@@ -350,14 +350,13 @@ void execArrayAccAsig(Table table, Array_Acc_Asig st, int line){
     case   BOOL: code = changeArrayBool(table,st.name,e->value._bool, accessor);     break;
     case   CHAR: code = changeArrayChar(table,st.name,e->value._char, accessor);     break;
     case DOUBLE: code = changeArrayDouble(table,st.name,e->value._double, accessor); break;
-
   }
   Expression * var;
   int size;
   switch(code){
     case SUCCESS: break;
     case TYPE_DOESNT_AGREE:
-      valueOfArray(table,st.name,&var,&size);
+      valueOfArray(table,st.name,&var,size);
       printf("Error linea %d, se ha intentado asignar un %s al array %s pero es de tipo %s",
              line,strType[getType(e)],st.name,strType[getType(var)]);
       break;

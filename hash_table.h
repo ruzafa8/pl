@@ -22,7 +22,7 @@ Table createTable();
  * returns if the Variable is defined and also its value, its type and its length if it's an array
  */
 int valueOf(const Table table, const char * var, Expression** value);
-int valueOfArray(const Table table, const char * var, Expression ** value, int *size);
+int valueOfArray(const Table table, const char * var, Expression ** value, int size);
 
 /**
  * A Set of adds Variableiables

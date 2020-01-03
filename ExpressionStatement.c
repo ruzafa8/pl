@@ -331,7 +331,7 @@ Expression * array_accessor_evaluate(Table table, ArrayAccessorExpressionStateme
     int size;
     Expression * accessor = evaluate(table, acc.accessor);
 
-    valueOfArray(table, acc.name, &res, &size);
+    valueOfArray(table, acc.name, &res, size);
     if(res == NULL) {
         readExitCodeVariables(VAR_NOT_FOUND_ERROR, acc.name,UNKNOWN,UNKNOWN);
         exit(-1);
