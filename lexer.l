@@ -52,7 +52,6 @@ IDENTITYRULE [[:alpha:]][[:alnum:]]*
 "Proposiciones"  {yylval.type = BOOL; DEBUG_PRINT_LEX("%s","BOOLARRAY"); return ARRAYTYPETOK;}
 "Letras"         {yylval.type = CHAR; DEBUG_PRINT_LEX("%s","CHARARRAY"); return ARRAYTYPETOK;}
 
-
 "imprime"        {DEBUG_PRINT_LEX("%s","imprime"); return IMPRIMIR; /* Comandos */}
 "se"             {DEBUG_PRINT_LEX("%s","se"); return IFTOK;}
 "daquela"        {DEBUG_PRINT_LEX("%s","daquela"); return THENTOK;}
@@ -60,6 +59,8 @@ IDENTITYRULE [[:alpha:]][[:alnum:]]*
 
 "("              {DEBUG_PRINT_LEX("%s","("); return OPPARTH; /* RECONOCIMIENTO DE OPERADORES BASICOS*/}
 ")"              {DEBUG_PRINT_LEX("%s",")"); return CLOSPARTH;}
+"["              {DEBUG_PRINT_LEX("%s","["); return OPARRAY;}
+"]"              {DEBUG_PRINT_LEX("%s","]"); return CLOSARRAY;}
 "+"              {DEBUG_PRINT_LEX("%s","+"); return PLUSTOK;}
 "-"              {DEBUG_PRINT_LEX("%s","-"); return MINUSTOK;}
 "*"              {DEBUG_PRINT_LEX("%s","*"); return BYTOK;}

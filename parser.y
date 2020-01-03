@@ -55,7 +55,7 @@
 %token ASSIGEQUALS
 %token <valString> STRING
 
-%token PLUSTOK MINUSTOK BYTOK DIVIDETOK OPPARTH CLOSPARTH
+%token PLUSTOK MINUSTOK BYTOK DIVIDETOK OPPARTH CLOSPARTH OPARRAY CLOSARRAY
 %token ORTOK ANDTOK XORTOK SITOK SIITOK LESSTOK LESS_EQTOK MORETOK MORE_EQTOK NOT_EQTOK DOBLE_EQUALSTOK
 %token <expr> ENTERO DOBLE CARACTER PROPOSICION
 %token HAZ MIENTRAS PUNTO COMMA REPITE VECES
@@ -107,7 +107,7 @@ initList:
 varAssign: IDENTIFIER EQUALS expression { $$ = createAsig($1, $3,yylineno);}
 ;
 
-arrayAccessorAssign: IDENTIFIER PUNTO expression EQUALS expression { $$ = createArrayAccessorAsig($1,$3,$5,yylineno);}
+arrayAccessorAssign: IDENTIFIER OPARRAY expression CLOSARRAY EQUALS expression { $$ = createArrayAccessorAsig($1,$3,$6,yylineno);}
 ;
 
 
@@ -166,7 +166,7 @@ h: MINUSTOK i {$$ = createUnExpression(UN_MINUS, $2);}
 i: OPPARTH expression CLOSPARTH {$$ = $2;}
   | literal {$$ = $1;}
   | IDENTIFIER {$$ = createVariableExpression($1);}
-  | IDENTIFIER PUNTO expression {$$ = createArrayAccessorExpression($1,$3);}
+  | IDENTIFIER OPARRAY expression CLOSARRAY {$$ = createArrayAccessorExpression($1,$3);}
   ;
 literal:
   ENTERO | DOBLE | CARACTER | PROPOSICION {$$ = $1;}
