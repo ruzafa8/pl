@@ -38,7 +38,7 @@ Statement * createDeclAsigArray(char * name, ExpressionStatement * arraySize, Ty
   }
   st->type = ARRAY_DECL_ASIG;
   st->st._array_decl_asig.name = strdup(name);
-  st->st._array_decl_asig.t = t;
+  st->st._array_decl_asig.type = t;
   st->st._array_decl_asig.arraySize = size;
   st->st._array_decl_asig.initList = initList;
 
@@ -178,37 +178,100 @@ void execDeclAsig(Table table, Decl_Asig st, int line){
 void execArrayDeclAsig(Table table, Array_Decl_Asig st, int line){
   EXIT_CODE code;
   Type t = st.type;
-  int i = 0;
-  Expression * eArray[st.size];
   //Walking and autotyping the array
   InitiationList *p = st.initList;
-  while((p!=NULL) || (t == UNKNOWN)){
+  while(p!=NULL){
     if(p->e == NULL) 
       p=p->next;
     else {
-      expr = evaluate(table, p->e);
-      t = getType(expr);
-      p->p-next;
+      Expression * expr = evaluate(table, p->e);
+      if(t != UNKNOWN)
+        t = getType(expr);
+      else if(t!= getType(expr)) {
+        t == UNKNOWN;
+        break;
+      }
+      p=p->next;
     }
   }
+
   if(t == UNKNOWN) {
     printf("Error línea %d, la lista de inicialización de la variable %s no es valida",line,st.name);
   } else {
-      //Actual assignation
-      InitiationList *p = st.initList;
-      while(p!=NULL){
-        if(p->e == NULL) {
-            //default value
-            switch(getType(e)){
-                 case    INT: code = addDefaultInt(table, st.name);    break;
-                 case DOUBLE: code = addDefaultDouble(table, st.name); break;
-                 case   BOOL: code = addDefaultBool(table, st.name);   break;
-                 case   CHAR: code = addDefaultChar(table, st.name);   break;
-                 case UNKNOWN: code = add(table,st.name);
+    //Actual assignation
+    InitiationList *p = st.initList;
+    int i = 0;
+    Expression * expr;
+    //value list
+    switch(t){
+        case    INT:
+            ;// https://stackoverflow.com/questions/18496282/why-do-i-get-a-label-can-only-be-part-of-a-statement-and-a-declaration-is-not-a
+            int *intlist = malloc(sizeof(int)*st.arraySize);
+            while(p!=NULL){
+              if(p->e == NULL) {
+                  intlist[i] = 0;
+              } else {
+                  expr = evaluate(table, p->e);
+                  intlist[i] = expr->value._int;
+              }
+              p=p->next;
+              i++;
             }
+            code = addArrayInt(table, st.name, intlist, st.arraySize);
+            break;
+        case DOUBLE:
+            ;// https://stackoverflow.com/questions/18496282/why-do-i-get-a-label-can-only-be-part-of-a-statement-and-a-declaration-is-not-a
+            double* doublelist = malloc(sizeof(double)*st.arraySize);
+            while(p!=NULL){
+              if(p->e == NULL) {
+                  doublelist[i] = 0.0;
+              } else {
+                  expr = evaluate(table, p->e);
+                  doublelist[i] = expr->value._double;
+              }
+              p=p->next;
+              i++;
+            }
+            code = addArrayDouble(table, st.name, doublelist, st.arraySize);
+            break;
+        case BOOL:
+            ;// https://stackoverflow.com/questions/18496282/why-do-i-get-a-label-can-only-be-part-of-a-statement-and-a-declaration-is-not-a
+            Bool* boollist = malloc(sizeof(Bool)*st.arraySize);
+            while(p!=NULL){
+              if(p->e == NULL) {
+                  boollist[i] = FALSE;
+              } else {
+                  expr = evaluate(table, p->e);
+                  boollist[i] = expr->value._bool;
+              }
+              p=p->next;
+              i++;
+            }
+            code = addArrayBool(table, st.name, boollist, st.arraySize);
+            break;
+        case CHAR:
+            ;// https://stackoverflow.com/questions/18496282/why-do-i-get-a-label-can-only-be-part-of-a-statement-and-a-declaration-is-not-a
+            char* charlist = malloc(sizeof(char)*st.arraySize);
+            while(p!=NULL){
+              if(p->e == NULL) {
+                  charlist[i] = '\0';
+              } else {
+                  expr = evaluate(table, p->e);
+                  charlist[i] = expr->value._char;
+              }
+              p=p->next;
+              i++;
+            }
+            code = addArrayChar(table, st.name, charlist, st.arraySize);
+            break;
 
-        }
-      }
+    }
+    switch (code) {
+        case SUCCESS: break;
+        case VAR_ALREADY_EXISTS_ERROR:
+          printf("Error línea %d, la variable array %s ya existe",line,st.name);
+          break;
+    }
   }
 }
 

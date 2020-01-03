@@ -9,6 +9,11 @@ typedef enum  {
 	ARRAY_DECL_ASIG, ARRAY_DECL
 } StatementType;
 
+typedef struct _inlist {
+	ExpressionStatement * e;
+	struct _inlist * next;
+} InitiationList;
+
 
 typedef struct {
 	char * name;
@@ -89,11 +94,6 @@ typedef struct _Statement {
 	StatementType type;
 	int line;
 } Statement;
-
-typedef struct _inlist {
-	ExpressionStatement * e;
-	InitiationList * next;
-} InitiationList;
 
 Statement * createDecl(char * name, Type type, int line);
 Statement * createAsig(char * name, ExpressionStatement * e, int line);

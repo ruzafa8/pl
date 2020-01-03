@@ -41,7 +41,7 @@ EXIT_CODE addInt(Table table, const char * var, int value);
 EXIT_CODE addChar(Table table, const char * var, char value);
 EXIT_CODE addDouble(Table table, const char * var, double value);
 EXIT_CODE addBool(Table table, const char * var, Bool bool);
-/*
+
 EXIT_CODE addDefaultArrayInt(Table table, const char * var, int len); // array de 0's
 EXIT_CODE addDefaultArrayChar(Table table, const char * var, int len); // array de '\0'
 EXIT_CODE addDefaultArrayDouble(Table table, const char * var, int len); // array de 0.0
@@ -51,7 +51,7 @@ EXIT_CODE addArrayInt(Table table, const char * var, int* value, int len);
 EXIT_CODE addArrayChar(Table table, const char * var, char* value, int len);
 EXIT_CODE addArrayDouble(Table table, const char * var, double* value, int len);
 EXIT_CODE addArrayBool(Table table, const char * var, Bool* bool, int len);
-*/
+
 
 /*
  * This function deletes a Variable if it's defined
