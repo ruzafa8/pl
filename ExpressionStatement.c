@@ -336,7 +336,7 @@ Expression * array_accessor_evaluate(Table table, ArrayAccessorExpressionStateme
         readExitCodeVariables(VAR_NOT_FOUND_ERROR, acc.name,UNKNOWN,UNKNOWN);
         exit(-1);
     }
-    
+
     return res[accessor->value._int];
 }
 
@@ -352,7 +352,7 @@ Expression * evaluate(Table table, ExpressionStatement * e){
         case VARIABLE:
 
           valueOf(table,e->_e._var.name,&res);
-          if(e == NULL){
+          if(res == NULL){
             readExitCodeVariables(VAR_NOT_FOUND_ERROR,e->_e._var.name,UNKNOWN,UNKNOWN);
             exit(-1);
           }
