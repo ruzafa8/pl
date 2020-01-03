@@ -37,13 +37,13 @@ Expression * _eval_plus(Expression * lhs, Expression * rhs) {
     Type lhsType = getType(lhs);
 
     if (lhsType == INT && rhsType == INT) {
-        return createInt(rhs->value._int + rhs->value._int);
+        return createInt(lhs->value._int + rhs->value._int);
     } else if (lhsType == DOUBLE && rhsType == DOUBLE) {
-        return createDouble(rhs->value._double + rhs->value._double);
+        return createDouble(lhs->value._double + rhs->value._double);
     } else if (lhsType == INT && rhsType == DOUBLE) {
-        return createDouble(rhs->value._int + rhs->value._double);
+        return createDouble(lhs->value._int + rhs->value._double);
     } else if (lhsType == DOUBLE && rhsType == INT) {
-        return createDouble(rhs->value._double + rhs->value._int);
+        return createDouble(lhs->value._double + rhs->value._int);
     } else {
         readExitCodeType(TYPE_ERROR,lhsType,rhsType);
         exit(-1);
