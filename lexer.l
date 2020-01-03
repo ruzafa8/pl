@@ -28,7 +28,7 @@ BINARYOP [\+\-\*\/]|(and)|(or)
 
 IDENTITYRULE [[:alpha:]][[:alnum:]]*
 %%
-
+"--"{NYCS}"\n"   // Comentarios
 {WS}*            // Caracteres escapados
 
 \"{NYCS}\" {
