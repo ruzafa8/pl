@@ -29,6 +29,7 @@
     Type type;
     Statement * statement;
     ExpressionStatement * expr;
+    InitiationList * initlist;
 }
 /*union{
   char * valString;
@@ -57,11 +58,11 @@
 %token PLUSTOK MINUSTOK BYTOK DIVIDETOK OPPARTH CLOSPARTH
 %token ORTOK ANDTOK XORTOK SITOK SIITOK LESSTOK LESS_EQTOK MORETOK MORE_EQTOK NOT_EQTOK DOBLE_EQUALSTOK
 %token <expr> ENTERO DOBLE CARACTER PROPOSICION
-%token HAZ MIENTRAS PUNTO REPITE VECES
+%token HAZ MIENTRAS PUNTO COMMA REPITE VECES
 
 %type <expr> expression literal o p q r s t u v w x y z f g h i
 %type <statement> varDecl arrayDecl varAssign sentence sentences while_sentence conditional repeat
-%type <InitiationList> initList
+%type <initlist> initList
 %start S
 %% /* grammar */
 
