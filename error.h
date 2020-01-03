@@ -7,8 +7,9 @@ typedef enum {
     /*RELACIONADOS CON LOS TIPOS */
     TYPE_ERROR, // Error de tipo genérico
     TYPE_DOESNT_AGREE, // Los tipos no coinciden
-
+    /* RELACIONADOS CON LOS ARRAYS */
     OUT_OF_BOUNDS_ERROR,
+    IS_NOT_AN_ARRAY,
     /* RELACIONADOS CON LAS VARIABLES */
     VAR_NOT_FOUND_ERROR, //La variable no existe
     VAR_ALREADY_EXISTS_ERROR //La variable ya existe
